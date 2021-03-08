@@ -12,10 +12,10 @@ server.use('/api', (req, res) => { //todo: set up api router
     res.json({ message:"test"})
 })
 
-server.use(express.static('./client/build/'));
+server.use(express.static('../client/build/'));
 
 server.get("*", (req, res) => { 
- res.sendFile(path.join(__dirname, "client/build", "index.html"));
+ res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
 
