@@ -7,7 +7,13 @@ const cors = require('cors');
 server.use(cors());
 
 const path = require("path");
-
+server.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'"
+  );
+  next();
+});
 server.use('/api', (req, res) => { //todo: set up api router
     res.json({ message:"test"})
 })
