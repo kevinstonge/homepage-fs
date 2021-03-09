@@ -1,0 +1,32 @@
+@import "./base.scss";
+header {
+  @include flexR();
+  @media screen and (max-width: 200px) {
+    background-color: red;
+  }
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background-color: $b2;
+  h1 {
+    @include flexC();
+    .pageTitle {
+      font-size: large;
+      font-weight: bolder;
+    }
+  }
+  nav {
+    @include flexR();
+    justify-content: flex-end;
+    gap: 1rem;
+    a {
+      white-space: nowrap;
+      &:not(.selected) {
+        background-color: $b3;
+      }
+    }
+  }
+  > * {
+    padding: 0.5rem;
+  }
+}

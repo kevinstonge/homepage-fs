@@ -1,0 +1,13 @@
+@import "./base.scss";
+#root {
+  @include flexC();
+  background-color: $b1;
+  color: $f1;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  #mainContainer {
+    margin: 1rem;
+  }
+  font-family: "Courier New", Courier, monospace;
+}

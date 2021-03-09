@@ -1,0 +1,16 @@
+$b1: #111;
+$b2: #222;
+$b3: #333;
+$b4: #444;
+$f1: #bbb;
+$f2: #ccc;
+$f3: #ddd;
+$f4: #eee;
+@mixin flexR {
+  display: flex;
+  flex-direction: row;
+}
+@mixin flexC {
+  display: flex;
+  flex-direction: column;
+}
