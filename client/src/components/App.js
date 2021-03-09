@@ -5,8 +5,11 @@ function App() {
   return (
     <>
       <Router>
-        <div id="mainContainer">
+        <div id="mainContainer" class="container">
           <Header />
+          <div id="contentContainer" class="container">
+            <p>asdf</p>
+          </div>
         </div>
       </Router>
     </>
