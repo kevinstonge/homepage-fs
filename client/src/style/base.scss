@@ -6,6 +6,7 @@ $f1: #bbb;
 $f2: #ccc;
 $f3: #ddd;
 $f4: #eee;
+$e1: #a3c;
 @mixin flexR {
   display: flex;
   flex-direction: row;
@@ -13,4 +14,9 @@ $f4: #eee;
 @mixin flexC {
   display: flex;
   flex-direction: column;
+}
+@mixin border1($c, $r) {
+  border-radius: $r $r 0 0;
+  border-top: 1px solid $c;
+  border-left: 1px solid $c;
 }

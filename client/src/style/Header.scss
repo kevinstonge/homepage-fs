@@ -8,9 +8,10 @@ header {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  background-color: $b2;
+  background: linear-gradient(to top, $b1 0, $b2 4px, $b2);
   h1 {
     @include flexC();
+    cursor: default;
     .pageTitle {
       font-size: large;
       font-weight: bolder;
@@ -25,9 +26,24 @@ header {
     a {
       white-space: nowrap;
       padding: 0.25rem;
+      background-color: $b2;
       &.selected {
         background-color: $b3;
       }
+    }
+  }
+  @include border1($b4, 0.5rem);
+  a {
+    @include border1($b3, 0.2rem);
+    box-shadow: 0.1rem 0.05rem 0.1rem 0.05rem $b1;
+    &:hover {
+      @include border1($b4, 0.2rem);
+    }
+  }
+  a.selected {
+    @include border1($b4, 0.2rem);
+    &:hover {
+      cursor: default;
     }
   }
 }
