@@ -14,9 +14,7 @@ server.use((req, res, next) => {
   );
   next();
 });
-server.use('/api', (req, res) => { //todo: set up api router
-    res.json({ message:"test"})
-})
+server.use('/portfolio/skills', require('./api/portfolio/skillsRouter.js'));
 
 server.use(express.static('../client/build/'));
 
