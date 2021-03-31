@@ -14,7 +14,7 @@ server.use((req, res, next) => {
   );
   next();
 });
-server.use('/portfolio/skills', require('./api/portfolio/skillsRouter.js'));
+server.use('/api/portfolio/skills', require('./api/portfolio/skillsRouter.js'));
 
 server.use(express.static('../client/build/'));
 
