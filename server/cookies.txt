@@ -1,0 +1,56 @@
+---
+server.js:
+
+const cp = require('cookie-parser');
+server.use(cp());
+const authenticate = require('./api/middleware/authenticated.js');
+server.get('*', (req, res) => {
+    
+    if (authenticate(req)) {
+        if (req.path === "/") {
+            res.sendFile(path.join(__dirname, "../restrictedClient/build", "index.html"));
+        }
+        else {
+            res.sendFile(path.join(__dirname, "../restrictedClient/build", decodeURI(req.path)));
+        }
+    }
+    else {
+        server.use(express.static('../publicClient'));
+        res.sendFile(path.join(__dirname, "../publicClient", "index.html"))
+    }
+})
+
+---
+authenticated.js:
+
+const path = require('path');
+module.exports = (req) => {
+    if (req.cookies && req.cookies.auth && jwt.verify(req.cookies.auth, process.env.JWT_SECRET)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+
+---
+userRouter.js:
+
+router.post("/login", async (req, res) => {
+    try {
+        const username = req.body.user || "incorrect";
+        const password = req.body.pass || "invalid";
+        const authorized = await User.login({ username, password });
+        if (authorized) {
+            res.cookie('auth', jwt.sign({ user: req.body.user }, process.env.JWT_SECRET)).redirect('/');
+        }
+    }
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+});
+
+router.post("/logout", (req, res) => {
+    res.clearCookie('auth');
+})
