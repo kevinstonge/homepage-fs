@@ -1,5 +1,5 @@
 const db = require("../../data/dbConfig.js");
-const bcrypt = reuqire("bcryptjs");
+const bcrypt = require("bcryptjs");
 const login = async (loginObject) => {
   try {
     const { username, password } = loginObject;
