@@ -1,27 +1,27 @@
-const express = require('express');
+const express = require("express");
 const server = express();
 server.use(express.json());
-const helmet = require('helmet');
+const helmet = require("helmet");
 server.use(helmet());
-const cors = require('cors');
+const cors = require("cors");
 server.use(cors());
-
+const cp = require("cookie-parser");
+server.use(cp());
 const path = require("path");
 server.use((req, res, next) => {
   res.setHeader(
-    'Content-Security-Policy',
+    "Content-Security-Policy",
     "default-src 'self' http://www.kevinstonge.com http://kevinstonge.com;"
   );
   next();
 });
-server.use('/api/portfolio/skills', require('./api/portfolio/skillsRouter.js'));
+server.use("/admin", require("./api/portfolio/adminRouter.js"));
+server.use("/api/portfolio/skills", require("./api/portfolio/skillsRouter.js"));
 
-server.use(express.static('../client/build/'));
+server.use(express.static("../client/build/"));
 
-server.get("*", (req, res) => { 
- res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+server.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
-
-
 
 module.exports = server;
