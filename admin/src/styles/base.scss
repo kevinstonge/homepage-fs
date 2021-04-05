@@ -16,4 +16,24 @@ $e2: #c1c;
   background-color: $bg;
   padding: 0.25rem;
   border-radius: 0.25rem;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  &:focus {
+    outline: 1px solid white;
+  }
+  &:hover {
+    background-color: transparentize($b3, 0.5);
+    color: #fff;
+    cursor: pointer;
+  }
+  &.active {
+    background-color: unset;
+    outline: unset;
+    &:hover {
+      color: $f3;
+      cursor: default;
+    }
+  }
+  font-family: unset;
 }

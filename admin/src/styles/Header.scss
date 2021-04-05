@@ -4,6 +4,7 @@ header {
   flex-direction: row;
   gap: 1rem;
   align-items: center;
+  justify-content: space-between;
   background-color: $b2;
   padding: 0.5rem;
   @include phone {
@@ -16,19 +17,9 @@ header {
     @include phone {
       flex-direction: column;
     }
-    a {
+    a,
+    button {
       @include button($b3, $f3);
-    }
-    a:hover {
-      background-color: transparentize($b3, 0.5);
-      color: #fff;
-    }
-    a.active {
-      background-color: unset;
-      &:hover {
-        color: $f3;
-        cursor: default;
-      }
     }
   }
 }
