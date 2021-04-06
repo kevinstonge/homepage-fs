@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const static = require("express").static;
+const stat = require("express").static;
 const path = require("path");
 const authenticate = require("./middleware/authenticate.js");
 const login = require("./adminModel.js");
@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 router.get("*", (req, res) => {
   if (authenticate(req)) {
     //if authenticated, send to admin/build/index.html
-    router.use(static("../../../admin/"));
+    router.use(stat("../../../admin/"));
     if (req.path === "/") {
       //for root path, just send index.html
       res.sendFile(path.join(__dirname, "../../../admin/build/", "index.html"));
@@ -22,7 +22,7 @@ router.get("*", (req, res) => {
       );
     }
   } else {
-    router.use(static("../../../adminLogin/"));
+    router.use(stat("../../../adminLogin/"));
     //if not authenticated, send to adminLogin/ (same logic as above)
     if (req.path === "/") {
       res.sendFile(path.join(__dirname, "../../../adminLogin/", "index.html"));
