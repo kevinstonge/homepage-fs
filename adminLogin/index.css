@@ -1,0 +1,29 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #111;
+  color: #eee;
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-start;
+  align-items: center;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-items: flex-start;
+  align-items: center;
+}
+input,
+button {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #aaa;
+}
+input:focus,
+button:focus {
+  outline: 1px solid #fff;
+  border-radius: 0;
+}
