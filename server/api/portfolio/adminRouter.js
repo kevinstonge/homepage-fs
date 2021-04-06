@@ -11,19 +11,26 @@ const jwt = require("jsonwebtoken");
 router.get("*", (req, res) => {
   if (authenticate(req)) {
     //if authenticated, send to admin/build/index.html
-    router.use(static("../../../admin"));
+    router.use(static("../../../admin/"));
     if (req.path === "/") {
       //for root path, just send index.html
-      res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
+      res.sendFile(path.join(__dirname, "../../../admin/build/", "index.html"));
     } else {
       //if another path is specified, send the requested path/file (I think this hands off to React routes, not sure yet!)
       res.sendFile(
-        path.join(__dirname, "../../../admin/build", decodeURI(req.path))
+        path.join(__dirname, "../../../admin/build/", decodeURI(req.path))
       );
     }
   } else {
-    //if not authenticated, send to admin/login.html
-    res.sendFile(path.join(__dirname, "../../../admin", "login.html"));
+    router.use(static("../../../adminLogin/"));
+    //if not authenticated, send to adminLogin/ (same logic as above)
+    if (req.path === "/") {
+      res.sendFile(path.join(__dirname, "../../../adminLogin/", "index.html"));
+    } else {
+      res.sendFile(
+        path.join(__dirname, "../../../adminLogin/", decodeURI(req.path))
+      );
+    }
   }
 });
 
