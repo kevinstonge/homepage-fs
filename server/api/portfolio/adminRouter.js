@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
         .redirect("/admin");
     } else {
       console.log("unauthorized");
-      res.redirect("/admin/login");
+      res.redirect("/admin");
     }
   } catch (error) {
     console.log(error);
