@@ -12,11 +12,19 @@ router.get("/", async (req, res) => {
   }
 });
 router.post("/", async (req, res) => {
+  //long_name (required), short_name, logo, proficiency
   try {
-    res.status(200).json({ message: "ok!" });
+    if (req.body.skill.long_name && req.body.skill.long_name.length > 0) {
+      const newSkill = await Skills.addSkill(req.body.skill);
+      if (newSkill) {
+        res.status(200).json({ newSkill });
+      }
+    } else {
+      res.status(500).json({ message: "error1" });
+    }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "error!" });
+    res.status(500).json({ message: "error2" });
   }
 });
 

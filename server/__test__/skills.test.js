@@ -13,6 +13,27 @@ describe("GET requests to /api/portfolio/skills", () => {
     expect(result.body.skills.length).toBe(0);
   });
 });
+describe("POST requests to /api/portfolio/skills", () => {
+  it("should respond with the new skill", async () => {
+    const result = await request(server)
+      .post("/api/portfolio/skills")
+      .send({
+        skill: {
+          long_name: "JavaScript (ECMA Script 5)",
+          short_name: "js",
+          proficiency: 3,
+        },
+      });
+    expect(result.body.newSkill.length).toBe(1);
+  });
+});
+describe("GET requests to /api/portfolio/skills", () => {
+  it("should respond with full list of skills", async () => {
+    const result = await request(server).get("/api/portfolio/skills");
+    expect(result.body.skills.length).toBe(1);
+    expect(result.body.skills[0].short_name).toBe("js");
+  });
+});
 // describe("POST requests to /api/portfolio/skills with bad input", () => {
 //     it("should respond with 400 if incomplete data is provided", async () => {
 //         const result = await request(server).post("/api/portfolio/skills").send({ "long_name": "JavaScript (ECMA Script 5)" });
