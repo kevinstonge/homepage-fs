@@ -6,15 +6,16 @@ exports.up = function (knex) {
       projects.increments();
       projects.text("title", 64).notNullable();
       projects.text("description");
-      projects.blob("image");
+      projects.text("image");
       projects.text("github");
-      projects.text("url");
+      projects.text("url").notNullable();
+      projects.integer("rank");
     })
     .createTable("skills", (skills) => {
       skills.increments();
       skills.text("long_name").notNullable();
       skills.text("short_name");
-      skills.blob("logo");
+      skills.text("logo");
       skills.integer("proficiency");
     })
     .createTable("projects-skills", (bridge) => {

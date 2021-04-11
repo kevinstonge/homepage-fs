@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.redirect("/admin/login");
+    res.redirect("/admin");
     throw error;
   }
 });

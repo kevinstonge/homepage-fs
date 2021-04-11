@@ -1,6 +1,7 @@
 const Skills = require("./skillsModel");
 const router = require("express").Router();
 const upload = require('./middleware/fileUpload.js');
+const auth = require('./middleware/authenticate.js');
 //200 OK, 201 CREATED, 400 BAD REQUEST, 401 UNAUTHORIZED, 500 INTERNAL SERVER ERROR
 // router.use('/:id', validation middleware)
 router.get("/", async (req, res) => {
@@ -12,7 +13,7 @@ router.get("/", async (req, res) => {
     throw error;
   }
 });
-router.post("/", upload.single('logo'), async (req, res) => {
+router.post("/", [auth, upload.single('logo')], async (req, res) => {
   //long_name (required), short_name, logo, proficiency
   try {
     if (req.body.long_name && req.body.long_name.length > 0) {
@@ -20,7 +21,7 @@ router.post("/", upload.single('logo'), async (req, res) => {
         long_name: req.body.long_name,
         short_name: req.body.short_name || "",
         proficiency: req.body.proficiency || 0,
-        logo: req.body.logo?.path || ""
+        logo: req.file?.filename || ""
       }
       const addedSkill = await Skills.addSkill(newSkill);
       if (addedSkill) {

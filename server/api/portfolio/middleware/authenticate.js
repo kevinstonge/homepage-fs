@@ -1,13 +1,14 @@
-const path = require("path");
 const jwt = require("jsonwebtoken");
-module.exports = (req) => {
+module.exports = (req, res, next) => {
   if (
     req.cookies &&
     req.cookies.auth &&
     jwt.verify(req.cookies.auth, process.env.JWT_SECRET)
   ) {
-    return true;
+    if (next !== undefined) { next() }
+    else { return true }
   } else {
-    return false;
+    if (next !== undefined) { res.status(401).json({ message: "unauthorized" }) }
+    else { return false }
   }
 };

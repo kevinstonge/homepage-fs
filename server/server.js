@@ -2,7 +2,7 @@ const express = require("express");
 const server = express();
 server.use(express.json());
 const helmet = require("helmet");
-// ser`ver.use(helmet());
+// server.use(helmet());
 const cors = require("cors");
 server.use(cors());
 const cp = require("cookie-parser");

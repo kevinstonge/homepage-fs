@@ -1,7 +1,9 @@
+require('dotenv').config();
 const request = require("supertest");
 const server = require("../server.js");
 const db = require("../data/dbConfig.js");
 const path = require('path');
+const goodCookie = 'auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTgwOTk1MDl9.1gPizbSQ_qfZHjCR55GxCIn-bT3JgKANCB-_zg2E_KY';
 beforeAll(async () => {
   await db("projects-skills").truncate();
   await db("skills").truncate();
@@ -10,7 +12,10 @@ beforeAll(async () => {
 
 describe("POST requests to /api/portfolio/skills with bad input", () => {
     it("should respond with 400 if incomplete data is provided", async () => {
-      const result = await request(server).post("/api/portfolio/skills").send({ "short_name": "js" });
+      const result = await request(server)
+        .post("/api/portfolio/skills")
+        .set('Cookie', goodCookie)
+        .send({ "short_name": "js" });
         expect(result.status).toBe(400);
     });
 });
@@ -25,6 +30,7 @@ describe("POST requests to /api/portfolio/skills with NO logo image provided", (
   it("should respond with the new skill", async () => {
     const result = await request(server)
       .post("/api/portfolio/skills")
+      .set('Cookie', goodCookie)
       .send({
           long_name: "JavaScript (ECMA Script 5)",
           short_name: "js",
@@ -39,6 +45,7 @@ describe("POST requests to /api/portfolio/skills with image attachment", () => {
     try {
       const result = await request(server)
         .post('/api/portfolio/skills')
+        .set('Cookie', goodCookie)
         .field('long_name', "HTML 5")
         .field('short_name', 'html')
         .field('proficiency', 3)
@@ -58,6 +65,7 @@ describe("GET requests to /api/portfolio/skills", () => {
     const result = await request(server).get("/api/portfolio/skills");
     expect(result.body.skills.length).toBe(2);
     expect(result.body.skills[0].short_name).toBe("js");
+    expect(result.body.skills[1].logo).toBe('logo-test.png');
   });
 });
 
