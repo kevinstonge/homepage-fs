@@ -69,3 +69,9 @@ describe("GET requests to /api/portfolio/skills", () => {
   });
 });
 
+describe("PUT requests to /api/portfolio/skills/:id for an id that doesn't exist", () => {
+  it("should respond with status 404", async () => {
+    const result = await request(server).put("/api/portfolio/skills/7").set('Cookie', goodCookie);
+    expect(result.status).toBe(404);
+  })
+})
