@@ -94,7 +94,7 @@ describe("PUT requests to /api/portfolio/skills/:id with no data", () => {
 });
 
 describe("PUT requests to /api/portfolio/skills/:id with one value changed", () => {
-  it("should respond with status 201 and the updated data should be returned on a subsequent GET request", async () => {
+  it("should respond with status 200 and the updated data should be returned on a subsequent GET request", async () => {
     const result = await request(server)
       .put("/api/portfolio/skills/1")
       .set("Cookie", goodCookie)
@@ -103,5 +103,16 @@ describe("PUT requests to /api/portfolio/skills/:id with one value changed", () 
     expect(result.status).toBe(200);
     const newSkills = await request(server).get("/api/portfolio/skills");
     expect(newSkills.body.skills[0].proficiency).toBe(1);
+  });
+});
+
+describe("PUT requests to /api/portfolio/skills/:id with image plus one value changed", () => {
+  it("should respond with status 200", async () => {
+    const result = await request(server)
+      .put("/api/portfolio/skills/1")
+      .set("Cookie", goodCookie)
+      .field("proficiency", 3)
+      .attach("logo", path.join(__dirname, "../images/test2.png"));
+    expect(result.status).toBe(200);
   });
 });

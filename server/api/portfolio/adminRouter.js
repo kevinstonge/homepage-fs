@@ -36,7 +36,6 @@ router.get("*", (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    console.log(req.body);
     const username = req.body.username || "incorrect";
     const password = req.body.password || "invalid";
     const authorized = await login({ username, password });
