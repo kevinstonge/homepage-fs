@@ -3,7 +3,6 @@ const request = require("supertest");
 const server = require("../server.js");
 const db = require("../data/dbConfig.js");
 const path = require("path");
-const { default: expectCt } = require("helmet/dist/middlewares/expect-ct");
 let goodCookie = "";
 beforeAll(async () => {
   const loginRequest = await request(server)
@@ -99,7 +98,6 @@ describe("PUT requests to /api/portfolio/skills/:id with one value changed", () 
       .put("/api/portfolio/skills/1")
       .set("Cookie", goodCookie)
       .field("proficiency", 1);
-    console.log(result.body.message);
     expect(result.status).toBe(200);
     const newSkills = await request(server).get("/api/portfolio/skills");
     expect(newSkills.body.skills[0].proficiency).toBe(1);

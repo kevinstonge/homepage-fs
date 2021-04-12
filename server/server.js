@@ -20,7 +20,10 @@ const path = require("path");
 // });
 server.use("/admin", require("./api/portfolio/adminRouter.js"));
 server.use("/api/portfolio/skills", require("./api/portfolio/skillsRouter.js"));
-
+server.use(
+  "/api/portfolio/projects",
+  require("./api/portfolio/projectsRouter.js")
+);
 server.use(express.static("../client/build/"));
 
 server.get("*", (req, res) => {
