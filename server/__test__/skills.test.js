@@ -116,3 +116,14 @@ describe("PUT requests to /api/portfolio/skills/:id with image plus one value ch
     expect(result.status).toBe(200);
   });
 });
+
+describe("DELETE requests to /api/portfolio/skills/:id", () => {
+  it("should respond with status 200, subsequent GET request should not contain deleted item", async () => {
+    const result = await request(server)
+      .delete("/api/portfolio/skills/1")
+      .set("Cookie", goodCookie);
+    expect(result.status).toBe(200);
+    const newSkills = await request(server).get("/api/portfolio/skills");
+    expect(newSkills.body.skills.length).toBe(1);
+  });
+});

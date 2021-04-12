@@ -81,4 +81,18 @@ router.put(
   }
 );
 
+router.delete("/:id", [auth, skillExists], async (req, res) => {
+  try {
+    const deleted = await Skills.deleteSkill(req.params.id);
+    if (deleted) {
+      res
+        .status(200)
+        .json({ message: `skill ${req.params.id} deleted successfully` });
+    } else {
+      res.status(500).json({ message: "error deleting skill" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "error accessing database" });
+  }
+});
 module.exports = router;

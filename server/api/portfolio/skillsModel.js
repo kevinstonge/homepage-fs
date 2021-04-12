@@ -10,4 +10,7 @@ const listSkills = async () => {
 const updateSkill = async (id, skillObject) => {
   return await db("skills").where({ id }).update(skillObject);
 };
-module.exports = { addSkill, listSkills, updateSkill };
+const deleteSkill = async (id) => {
+  return await db("skills").where({ id }).del();
+};
+module.exports = { addSkill, listSkills, updateSkill, deleteSkill };
