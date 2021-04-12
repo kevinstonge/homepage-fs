@@ -54,24 +54,28 @@ router.put(
         res.status(400).json({
           message: "error: no valid values provided to update, no changes made",
         });
-      }
-      const revisedSkill = {
-        //put requests to revise skills can include only the properties to be changed:
-        id: req.params.id,
-        ...(req.body.long_name && { long_name: req.body.long_name }),
-        ...(req.body.short_name && { short_name: req.body.short_name }),
-        ...(req.body.proficiency && { proficiency: req.body.proficiency }),
-        ...(req.file.filename && { logo: req.file.filename }),
-      };
-      const updatedSkill = await Skills.updateSkill(revisedSkill);
-      if (updatedSkill) {
-        res.status(200).json({ message: "successfully updated skill" });
       } else {
-        res
-          .status(500)
-          .json({ message: "an error occurred while updating the skill" });
+        const revisedSkill = {
+          //put requests to revise skills can include only the properties to be changed:
+          ...(req.body.long_name && { long_name: req.body.long_name }),
+          ...(req.body.short_name && { short_name: req.body.short_name }),
+          ...(req.body.proficiency && { proficiency: req.body.proficiency }),
+          ...(req.file?.filename && { logo: req.file.filename }),
+        };
+        const updatedSkill = await Skills.updateSkill(
+          req.params.id,
+          revisedSkill
+        );
+        if (updatedSkill) {
+          res.status(200).json({ message: "successfully updated skill" });
+        } else {
+          res
+            .status(500)
+            .json({ message: "an error occurred while updating the skill" });
+        }
       }
     } catch (err) {
+      console.log(err);
       res.status(500).json({ message: "server failed to update the skill" });
     }
   }

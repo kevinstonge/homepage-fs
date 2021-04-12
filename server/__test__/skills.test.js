@@ -3,9 +3,15 @@ const request = require("supertest");
 const server = require("../server.js");
 const db = require("../data/dbConfig.js");
 const path = require("path");
-const goodCookie =
-  "auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTgwOTk1MDl9.1gPizbSQ_qfZHjCR55GxCIn-bT3JgKANCB-_zg2E_KY";
+const { default: expectCt } = require("helmet/dist/middlewares/expect-ct");
+let goodCookie = "";
 beforeAll(async () => {
+  const loginRequest = await request(server)
+    .post("/admin/login")
+    .send({ username: "kevinstonge", password: process.env.pw });
+  if (loginRequest.header["set-cookie"]) {
+    goodCookie = loginRequest.header["set-cookie"];
+  }
   await db("projects-skills").truncate();
   await db("skills").truncate();
   await db("projects").truncate();
@@ -75,5 +81,27 @@ describe("PUT requests to /api/portfolio/skills/:id for an id that doesn't exist
       .put("/api/portfolio/skills/7")
       .set("Cookie", goodCookie);
     expect(result.status).toBe(404);
+  });
+});
+
+describe("PUT requests to /api/portfolio/skills/:id with no data", () => {
+  it("should respond with status 400", async () => {
+    const result = await request(server)
+      .put("/api/portfolio/skills/1")
+      .set("Cookie", goodCookie);
+    expect(result.status).toBe(400);
+  });
+});
+
+describe("PUT requests to /api/portfolio/skills/:id with one value changed", () => {
+  it("should respond with status 201 and the updated data should be returned on a subsequent GET request", async () => {
+    const result = await request(server)
+      .put("/api/portfolio/skills/1")
+      .set("Cookie", goodCookie)
+      .field("proficiency", 1);
+    console.log(result.body.message);
+    expect(result.status).toBe(200);
+    const newSkills = await request(server).get("/api/portfolio/skills");
+    expect(newSkills.body.skills[0].proficiency).toBe(1);
   });
 });
