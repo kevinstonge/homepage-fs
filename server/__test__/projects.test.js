@@ -2,7 +2,6 @@ require("dotenv").config();
 const request = require("supertest");
 const server = require("../server.js");
 const db = require("../data/dbConfig.js");
-const path = require("path");
 let goodCookie = "";
 beforeAll(async () => {
   const loginRequest = await request(server)
