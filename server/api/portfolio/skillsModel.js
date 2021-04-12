@@ -6,4 +6,9 @@ const addSkill = async (skillObject) => {
 const listSkills = async () => {
   return await db("skills");
 };
-module.exports = { addSkill, listSkills };
+const updateSkill = async (skillObject) => {
+  return await db("skills")
+    .where({ id: req.params.id })
+    .update({ skillObject });
+};
+module.exports = { addSkill, listSkills, updateSkill };
