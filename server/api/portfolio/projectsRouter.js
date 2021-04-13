@@ -1,44 +1,53 @@
 const Projects = require("./projectsModel");
+const Skills = require("./skillsModel");
 const router = require("express").Router();
 const upload = require("./middleware/fileUpload.js");
 const auth = require("./middleware/authenticate.js");
+const validUrl = require("validator").isURL;
 const projectExists = require("./middleware/projectExists.js");
 //200 OK, 201 CREATED, 400 BAD REQUEST, 401 UNAUTHORIZED, 500 INTERNAL SERVER ERROR
 
 router.get("/", async (req, res) => {
   try {
     projects = await Projects.listProjects();
-    res.status(200).json({ projects });
+    skills = await Skills.listSkills();
+    res.status(200).json({ projects, skills });
   } catch (error) {
     console.log(error);
     throw error;
   }
 });
-// router.post("/", [auth, upload.single("logo")], async (req, res) => {
-//   //long_name (required), short_name, logo, proficiency
-//   try {
-//     if (req.body.long_name && req.body.long_name.length > 0) {
-//       const newSkill = {
-//         long_name: req.body.long_name,
-//         short_name: req.body.short_name || "",
-//         proficiency: req.body.proficiency || 0,
-//         logo: req.file?.filename || "",
-//       };
-//       const addedSkill = await Projects.addSkill(newSkill);
-//       if (addedSkill) {
-//         res.status(201).json({ addedSkill });
-//       }
-//     } else {
-//       res
-//         .status(400)
-//         .json({ message: "Projects must include a long_name value" });
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json({ message: "server failed to create the skill" });
-//     throw err;
-//   }
-// });
+router.post("/", [auth, upload.single("image")], async (req, res) => {
+  //title (required), url (required), description, image, github, rank (auto-assign on creation, allow change through ranking interface)
+  try {
+    if (
+      req.body.title &&
+      req.body.title.length > 0 &&
+      req.body.url &&
+      validUrl(req.body.url)
+    ) {
+      const newProject = {
+        title: req.body.title,
+        url: req.body.url,
+        ...(req.body.description && { description: req.body.description }),
+        ...(req.body.image && { image: req.body.image }),
+        ...(req.body.github && { github: req.body.github }),
+      };
+      const addedProject = await Projects.addProject(newProject);
+      if (addedProject) {
+        res.status(201).json({ addedProject });
+      }
+    } else {
+      res.status(400).json({
+        message: "Projects must include at least title and url values",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "server failed to create the project" });
+    throw err;
+  }
+});
 
 // router.put(
 //   "/:id",

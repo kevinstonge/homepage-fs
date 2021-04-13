@@ -1,7 +1,18 @@
 const db = require("../../data/dbConfig.js");
 
 const addProject = async (projectObject) => {
-  return await db("projects").insert(projectObject);
+  //need to determine rank of newly created project
+  try {
+    const existingProjects = await db("projects").orderBy("rank", "desc");
+    let rank = 1;
+    if (existingProjects.length > 0) {
+      rank = existingProjects[0].rank + 1;
+    }
+    const newProject = { ...projectObject, rank };
+    return await db("projects").insert(newProject);
+  } catch (err) {
+    throw err;
+  }
 };
 const listProjects = async () => {
   return await db("projects");

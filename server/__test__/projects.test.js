@@ -14,38 +14,49 @@ beforeAll(async () => {
   await db("skills").truncate();
   await db("projects").truncate();
 });
-//projects table columns: title, description, image, github, url, rank
+/*
+BEHAVIOR
+project ranking:
+projects will have unique rank - when rank of one is changed, each lower-ranked project must be moved down a rank (rank++) until the rank value of the changed project is reached, this must be done as a 'transaction'. 
+on the frontend, rank will be drag and drop, position based
 
+skills-project bridge:
+bridge table between project_id and skill_id - need to query this table for each project, add skill_id list to project json for each project. 
+
+//projects table columns: title, description, image, github, url, rank
+*/
 describe("GET requests to /api/portfolio/projects", () => {
   it("should respond with full list of projects", async () => {
     const result = await request(server).get("/api/portfolio/projects");
     expect(result.body.projects.length).toBe(0);
+    expect(result.body.skills.length).toBe(0);
   });
 });
 
-// describe("POST requests to /api/portfolio/projects with bad input", () => {
-//   it("should respond with 400 if incomplete data is provided", async () => {
-//     const result = await request(server)
-//       .post("/api/portfolio/projects")
-//       .set("Cookie", goodCookie)
-//       .send({ github: "http://www.github.com/mockURL" });
-//     expect(result.status).toBe(400);
-//   });
-// });
+describe("POST requests to /api/portfolio/projects with bad input", () => {
+  it("should respond with 400 if incomplete data is provided", async () => {
+    const result = await request(server)
+      .post("/api/portfolio/projects")
+      .set("Cookie", goodCookie)
+      .send({ github: "http://www.github.com/mockURL" });
+    expect(result.status).toBe(400);
+  });
+});
 
-// describe("POST requests to /api/portfolio/skills with NO logo image provided", () => {
-//   it("should respond with the new skill", async () => {
-//     const result = await request(server)
-//       .post("/api/portfolio/skills")
-//       .set("Cookie", goodCookie)
-//       .send({
-//         long_name: "JavaScript (ECMA Script 5)",
-//         short_name: "js",
-//         proficiency: 3,
-//       });
-//     expect(result.body.addedSkill.length).toBe(1);
-//   });
-// });
+describe("POST requests to /api/portfolio/projects with NO image provided", () => {
+  it("should respond with the new project", async () => {
+    const result = await request(server)
+      .post("/api/portfolio/projects")
+      .set("Cookie", goodCookie)
+      .send({
+        title: "Sample project",
+        url: "http://www.sampleproject.com/mockURL",
+        description: "sample project - not real",
+      });
+    expect(result.body.addedProject.length).toBe(1);
+    console.log(result.body.addedProject);
+  });
+});
 
 // describe("POST requests to /api/portfolio/skills with image attachment", () => {
 //   it("should respond with 201", async () => {
