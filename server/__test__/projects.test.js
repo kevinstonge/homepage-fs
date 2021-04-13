@@ -2,6 +2,7 @@ require("dotenv").config();
 const request = require("supertest");
 const server = require("../server.js");
 const db = require("../data/dbConfig.js");
+const path = require("path");
 let goodCookie = "";
 beforeAll(async () => {
   const loginRequest = await request(server)
@@ -54,37 +55,36 @@ describe("POST requests to /api/portfolio/projects with NO image provided", () =
         description: "sample project - not real",
       });
     expect(result.body.addedProject.length).toBe(1);
-    console.log(result.body.addedProject);
   });
 });
 
-// describe("POST requests to /api/portfolio/skills with image attachment", () => {
-//   it("should respond with 201", async () => {
-//     try {
-//       const result = await request(server)
-//         .post("/api/portfolio/skills")
-//         .set("Cookie", goodCookie)
-//         .field("long_name", "HTML 5")
-//         .field("short_name", "html")
-//         .field("proficiency", 3)
-//         .attach("logo", path.join(__dirname, "../images/test.png"));
-//       expect(result.status).toBe(201);
-//       expect(result.body.addedSkill.length).toBe(1);
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   });
-// });
+describe("POST requests to /api/portfolio/projects with image attachment", () => {
+  it("should respond with 201", async () => {
+    try {
+      const result = await request(server)
+        .post("/api/portfolio/projects")
+        .set("Cookie", goodCookie)
+        .field("title", "sample project 2")
+        .field("description", "sample project 2 - also not real")
+        .field("url", "http://www.sampleproject2.com")
+        .attach("image", path.join(__dirname, "../images/test.png"));
+      expect(result.status).toBe(201);
+      expect(result.body.addedProject.length).toBe(1);
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  });
+});
 
-// describe("GET requests to /api/portfolio/skills", () => {
-//   it("should respond with full list of skills", async () => {
-//     const result = await request(server).get("/api/portfolio/skills");
-//     expect(result.body.skills.length).toBe(2);
-//     expect(result.body.skills[0].short_name).toBe("js");
-//     expect(result.body.skills[1].logo).toBe("logo-test.png");
-//   });
-// });
+describe("GET requests to /api/portfolio/projects", () => {
+  it("should respond with full list of projects", async () => {
+    const result = await request(server).get("/api/portfolio/projects");
+    expect(result.body.projects.length).toBe(2);
+    expect(result.body.projects[0].title).toBe("Sample project");
+    expect(result.body.projects[1].image).toBe("image-test.png");
+  });
+});
 
 // describe("PUT requests to /api/portfolio/skills/:id for an id that doesn't exist", () => {
 //   it("should respond with status 404", async () => {

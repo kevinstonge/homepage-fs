@@ -29,9 +29,9 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
       const newProject = {
         title: req.body.title,
         url: req.body.url,
-        ...(req.body.description && { description: req.body.description }),
-        ...(req.body.image && { image: req.body.image }),
-        ...(req.body.github && { github: req.body.github }),
+        description: req.body.description || "",
+        image: req.file?.filename || "",
+        github: req.body.github || "",
       };
       const addedProject = await Projects.addProject(newProject);
       if (addedProject) {
