@@ -33,7 +33,8 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
         image: req.file?.filename || "",
         github: req.body.github || "",
       };
-      const addedProject = await Projects.addProject(newProject);
+      const skills = req.body?.skills || [];
+      const addedProject = await Projects.addProject(newProject, skills);
       if (addedProject) {
         res.status(201).json({ addedProject });
       }
