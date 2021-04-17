@@ -28,7 +28,19 @@ const addProject = async (projectObject, skills) => {
 };
 
 const listProjects = async () => {
-  return await db("projects");
+  //this needs to append a skills array based on a join(?)
+  return await db("projects").innerJoin("projects-skills");
+  /*
+  this knex query should probably work
+   knex('users')
+    .innerJoin('user_emails','users.id','user_emails.user_id')
+    .select([
+      'users.id as userID',
+      'users.name as userName',
+      knex.raw('ARRAY_AGG(user_emails.adress) as email')
+    ])
+    .groupBy('users.id','users.name')
+  */
 };
 const updateProject = async (id, projectObject) => {
   return await db("projects").where({ id }).update(projectObject);

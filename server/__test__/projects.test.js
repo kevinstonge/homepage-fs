@@ -28,23 +28,23 @@ bridge table between project_id and skill_id - need to query this table for each
 */
 
 
-// describe("GET requests to /api/portfolio/projects", () => {
-//   it("should respond with full list of projects", async () => {
-//     const result = await request(server).get("/api/portfolio/projects");
-//     expect(result.body.projects.length).toBe(0);
-//     expect(result.body.skills.length).toBe(0);
-//   });
-// });
+describe("GET requests to /api/portfolio/projects", () => {
+  it("should respond with full list of projects", async () => {
+    const result = await request(server).get("/api/portfolio/projects");
+    expect(result.body.projects.length).toBe(0);
+    expect(result.body.skills.length).toBe(0);
+  });
+});
 
-// describe("POST requests to /api/portfolio/projects with bad input", () => {
-//   it("should respond with 400 if incomplete data is provided", async () => {
-//     const result = await request(server)
-//       .post("/api/portfolio/projects")
-//       .set("Cookie", goodCookie)
-//       .send({ github: "http://www.github.com/mockURL" });
-//     expect(result.status).toBe(400);
-//   });
-// });
+describe("POST requests to /api/portfolio/projects with bad input", () => {
+  it("should respond with 400 if incomplete data is provided", async () => {
+    const result = await request(server)
+      .post("/api/portfolio/projects")
+      .set("Cookie", goodCookie)
+      .send({ github: "http://www.github.com/mockURL" });
+    expect(result.status).toBe(400);
+  });
+});
 
 describe("POST requests to /api/portfolio/projects with NO image provided", () => {
   it("should respond with the new project", async () => {
@@ -67,33 +67,34 @@ describe("POST requests to /api/portfolio/projects with NO image provided", () =
     });
 });
 
-// describe("POST requests to /api/portfolio/projects with image attachment", () => {
-//   it("should respond with 201", async () => {
-//     try {
-//       const result = await request(server)
-//         .post("/api/portfolio/projects")
-//         .set("Cookie", goodCookie)
-//         .field("title", "sample project 2")
-//         .field("description", "sample project 2 - also not real")
-//         .field("url", "http://www.sampleproject2.com")
-//         .attach("image", path.join(__dirname, "../images/test.png"));
-//       expect(result.status).toBe(201);
-//       expect(result.body.addedProject.length).toBe(1);
-//     } catch (err) {
-//       console.log(err);
-//       throw err;
-//     }
-//   });
-// });
+describe("POST requests to /api/portfolio/projects with image attachment", () => {
+  it("should respond with 201", async () => {
+    try {
+      const result = await request(server)
+        .post("/api/portfolio/projects")
+        .set("Cookie", goodCookie)
+        .field("title", "sample project 2")
+        .field("description", "sample project 2 - also not real")
+        .field("url", "http://www.sampleproject2.com")
+        .attach("image", path.join(__dirname, "../images/test.png"));
+      expect(result.status).toBe(201);
+      expect(result.body.addedProject.length).toBe(1);
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  });
+});
 
-// describe("GET requests to /api/portfolio/projects", () => {
-//   it("should respond with full list of projects", async () => {
-//     const result = await request(server).get("/api/portfolio/projects");
-//     expect(result.body.projects.length).toBe(2);
-//     expect(result.body.projects[0].title).toBe("Sample project");
-//     expect(result.body.projects[1].image).toBe("image-test.png");
-//   });
-// });
+describe("GET requests to /api/portfolio/projects", () => {
+  it("should respond with full list of projects", async () => {
+    const result = await request(server).get("/api/portfolio/projects");
+    expect(result.body.projects.length).toBe(2);
+    expect(result.body.projects[0].title).toBe("Sample project");
+    expect(result.body.projects[1].image).toBe("image-test.png");
+    console.log(result.body.projects);
+  });
+});
 
 //----------- below not started
 
