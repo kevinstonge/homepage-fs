@@ -7,28 +7,22 @@ const addProject = async (projectObject, skills) => {
       rank = existingProjects[0].rank + 1;
     }
     const newProject = { ...projectObject, rank };
-    db.transaction((trx) => {
-      db("projects")
+    const result = await db.transaction(async (trx) => {
+      const id = await db("projects")
         .transacting(trx)
-        .insert(newProject)
-        .then(async (resp) => {
-          const project_id = resp[0];
-          if (!skills || skills.length === 0) {
-            return trx;
-          }
-          const skillsArray = skills.map((skill) => ({
-            project_id,
-            skill_id: skill,
-          }));
-          console.log("23");
-          db("projects-skills").transacting(trx).insert(skillsArray);
-        })
-        .then(() => {
-          trx.commit;
-        })
-        .catch(trx.rollback);
+        .insert(newProject);
+      if (skills.length > 0) {
+        const skillsArray = skills.map((skill) => ({
+          project_id,
+          skill_id: skill,
+        }));
+        await db("projects-skills").transacting(trx).insert(skillsArray);
+      }
+      return id;
     });
+    return result;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };
