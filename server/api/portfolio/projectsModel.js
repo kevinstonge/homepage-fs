@@ -41,6 +41,15 @@ const listProjects = async () => {
     ])
     .groupBy('users.id','users.name')
   */
+  
+  /*
+  knex has pluck, should work even better
+    User.pluck(:id)
+
+    # => (0.9ms)  SELECT "users"."id" FROM "users"
+    # => [12, 42, 1, 24, 200, ..., 365]
+  */
+  
 };
 const updateProject = async (id, projectObject) => {
   return await db("projects").where({ id }).update(projectObject);
