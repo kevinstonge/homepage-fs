@@ -99,53 +99,53 @@ describe("GET requests to /api/portfolio/projects", () => {
     expect(result.body.projects.length).toBe(2)
     expect(result.body.projects[0].title).toBe("Sample project");
     expect(result.body.projects[1].image).toBe("image-test.png");
-    console.log(result.body.projects);
+    expect(result.body.skills.length).toBe(2);
+  });
+});
+
+describe("PUT requests to /api/portfolio/projects/:id for an id that doesn't exist", () => {
+  it("should respond with status 404", async () => {
+    const result = await request(server)
+      .put("/api/portfolio/projects/7")
+      .set("Cookie", goodCookie);
+    expect(result.status).toBe(404);
+  });
+});
+
+describe("PUT requests to /api/portfolio/projects/:id with no data", () => {
+  it("should respond with status 400", async () => {
+    const result = await request(server)
+      .put("/api/portfolio/projects/1")
+      .set("Cookie", goodCookie);
+    expect(result.status).toBe(400);
+  });
+});
+
+describe("PUT requests to /api/portfolio/projects/:id with one value changed", () => {
+  it("should respond with status 200 and the updated data should be returned on a subsequent GET request", async () => {
+    const result = await request(server)
+      .put("/api/portfolio/projects/1")
+      .set("Cookie", goodCookie)
+      .field("description", "modified description for project 1");
+    expect(result.status).toBe(200);
+    const newSkills = await request(server).get("/api/portfolio/projects");
+    expect(newSkills.body.projects[0].description).toBe("modified description for project 1");
+  });
+});
+
+describe("PUT requests to /api/portfolio/projects/:id with associated skills changed", () => {
+  it("should respond with status 200", async () => {
+    const result = await request(server)
+      .put("/api/portfolio/projects/1")
+      .set("Cookie", goodCookie)
+      .field("skills", "[1]")
+    expect(result.status).toBe(200);
+    const newProjects = await request(server).get("/api/portfolio/projects");
+    expect(newProjects.body.projects[0].skills).toStrictEqual([1]);
   });
 });
 
 //----------- below not started
-
-// describe("PUT requests to /api/portfolio/skills/:id for an id that doesn't exist", () => {
-//   it("should respond with status 404", async () => {
-//     const result = await request(server)
-//       .put("/api/portfolio/skills/7")
-//       .set("Cookie", goodCookie);
-//     expect(result.status).toBe(404);
-//   });
-// });
-
-// describe("PUT requests to /api/portfolio/skills/:id with no data", () => {
-//   it("should respond with status 400", async () => {
-//     const result = await request(server)
-//       .put("/api/portfolio/skills/1")
-//       .set("Cookie", goodCookie);
-//     expect(result.status).toBe(400);
-//   });
-// });
-
-// describe("PUT requests to /api/portfolio/skills/:id with one value changed", () => {
-//   it("should respond with status 200 and the updated data should be returned on a subsequent GET request", async () => {
-//     const result = await request(server)
-//       .put("/api/portfolio/skills/1")
-//       .set("Cookie", goodCookie)
-//       .field("proficiency", 1);
-//     console.log(result.body.message);
-//     expect(result.status).toBe(200);
-//     const newSkills = await request(server).get("/api/portfolio/skills");
-//     expect(newSkills.body.skills[0].proficiency).toBe(1);
-//   });
-// });
-
-// describe("PUT requests to /api/portfolio/skills/:id with image plus one value changed", () => {
-//   it("should respond with status 200", async () => {
-//     const result = await request(server)
-//       .put("/api/portfolio/skills/1")
-//       .set("Cookie", goodCookie)
-//       .field("proficiency", 3)
-//       .attach("logo", path.join(__dirname, "../images/test2.png"));
-//     expect(result.status).toBe(200);
-//   });
-// });
 
 // describe("DELETE requests to /api/portfolio/skills/:id", () => {
 //   it("should respond with status 200, subsequent GET request should not contain deleted item", async () => {

@@ -1,3 +1,4 @@
+const { json } = require("express");
 const db = require("../../data/dbConfig.js");
 const addProject = async (projectObject, skills) => {
   try {
@@ -12,7 +13,8 @@ const addProject = async (projectObject, skills) => {
         .transacting(trx)
         .insert(newProject);
       if (skills.length > 0) {
-        const skillsArray = skills.map((skill) => ({
+          //converting skills to set and back to array to remove duplicates (just incase they are passed through somehow);
+          const skillsArray = [...new Set(skills)].map((skill) => ({
           project_id,
           skill_id: skill,
         }));
@@ -42,7 +44,7 @@ const listProjects = async () => {
       }
       memo[p].skills.push(project.skill_id);
       return memo;
-  }, {});
+    }, {});
     const projectsArray = Object.keys(reducedProjects).map(key => reducedProjects[key]);
     return projectsArray;
   }
@@ -53,9 +55,42 @@ const listProjects = async () => {
   
 };
 const updateProject = async (id, projectObject) => {
-  return await db("projects").where({ id }).update(projectObject);
+  try {
+    if (projectObject.skills && projectObject.skills.length > 0) {
+      projectObject.skills = JSON.parse(projectObject.skills);
+      const existingEntries = await db('projects-skills').pluck('skill_id').where('project_id', '=', id);
+      const skillsToDelete = existingEntries.filter(s => { if (!projectObject.skills.includes(s)) { return s } });
+      const skillsToAdd = projectObject.skills.filter(s => { if (!existingEntries.includes(s)) { return s } });
+      if (skillsToDelete.length > 0) {
+        await db('projects-skills').whereIn('skill_id', skillsToDelete).andWhere('project_id', '=', id).delete();
+      }
+      if (skillsToAdd.length > 0) {
+        const addSkillsArray = [...new Set(skillsToAdd)].map((skill) => ({
+          project_id: id,
+          skill_id: skill,
+        }));
+        await db("projects-skills").insert(addSkillsArray);
+      }
+      delete projectObject.skills;
+    }
+    //todo: write special case for when rank is updated
+
+
+    if (Object.keys(projectObject).length > 0) {
+      return await db("projects").where({ id }).update(projectObject);
+    }
+    else {
+      return await db('projects').where({ id });
+    }
+    
+  }
+  catch (err) {
+    console.log(err);
+    throw err;
+  }
 };
 const deleteProject = async (id) => {
   return await db("projects").where({ id }).del();
+  //todo: delete associated skills (does knex do this automatically with cascade?)
 };
 module.exports = { addProject, listProjects, updateProject, deleteProject };

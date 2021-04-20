@@ -54,46 +54,54 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
   }
 });
 
-// router.put(
-//   "/:id",
-//   [auth, skillExists, upload.single("logo")],
-//   async (req, res) => {
-//     try {
-//       if (
-//         !req.body.long_name &&
-//         !req.body.short_name &&
-//         !req.body.proficiency &&
-//         !req.file?.filename
-//       ) {
-//         res.status(400).json({
-//           message: "error: no valid values provided to update, no changes made",
-//         });
-//       } else {
-//         const revisedSkill = {
-//           //put requests to revise Projects can include only the properties to be changed:
-//           ...(req.body.long_name && { long_name: req.body.long_name }),
-//           ...(req.body.short_name && { short_name: req.body.short_name }),
-//           ...(req.body.proficiency && { proficiency: req.body.proficiency }),
-//           ...(req.file?.filename && { logo: req.file.filename }),
-//         };
-//         const updatedSkill = await Projects.updateSkill(
-//           req.params.id,
-//           revisedSkill
-//         );
-//         if (updatedSkill) {
-//           res.status(200).json({ message: "successfully updated skill" });
-//         } else {
-//           res
-//             .status(500)
-//             .json({ message: "an error occurred while updating the skill" });
-//         }
-//       }
-//     } catch (err) {
-//       console.log(err);
-//       res.status(500).json({ message: "server failed to update the skill" });
-//     }
-//   }
-// );
+router.put(
+  "/:id",
+  [auth, projectExists, upload.single("image")],
+  async (req, res) => {
+    try {
+      if ( 
+        !req.body.title &&
+        !req.body.description &&
+        !req.file?.filename &&
+        !req.body.github &&
+        !req.body.url &&
+        !req.body.rank &&  //not sure if I should keep rank here
+        !req.body.skills //not sure if I should keep skills here
+      ) {
+        res.status(400).json({
+          message: "error: no valid values provided to update, no changes made",
+        });
+      } else { 
+        const revisedProject = {
+          //put requests to revise Projects can include only the properties to be changed:
+          ...(req.body.title && { title: req.body.title }),
+          ...(req.body.description && { description: req.body.description }),
+          ...(req.file?.filename && { image: req.file.filename }),
+          ...(req.body.github && { github: req.body.github }),
+          ...(req.body.url && { url: req.body.url }),
+          ...(req.body.rank && { rank: req.body.rank }),
+          ...(req.body.skills && { skills: req.body.skills })
+        };
+        const updatedProject = await Projects.updateProject(
+          req.params.id,
+          revisedProject
+        );
+        if (updatedProject) {
+          res.status(200).json({ message: "successfully updated project", updatedProject });
+        } else {
+          res
+            .status(500)
+            .json({ message: "an error occurred while updating the project" });
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "server failed to update the project" });
+    }
+  }
+);
+
+//***below not done */
 
 // router.delete("/:id", [auth, skillExists], async (req, res) => {
 //   try {
