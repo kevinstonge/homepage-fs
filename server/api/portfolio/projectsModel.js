@@ -29,35 +29,27 @@ const addProject = async (projectObject, skills) => {
 
 const listProjects = async () => {
   try {
-    const results = await db('projects').join("projects-skills", 'projects-skills.project_id', "=", 'projects.id');
-    const reducedResults = results.reduce((memo, project) => {
-      if (!memo.skills) {
-        memo.skills = []
+    const projects = await db('projects').join("projects-skills", 'projects-skills.project_id', "=", 'projects.id');
+    const reducedProjects = projects.reduce((memo, project) => {
+      const p = `project${project.id}`;
+      if (!memo[p]) {
+          memo[p] = { ...project };
+          delete memo[p].skill_id;
+          delete memo[p].project_id;
       }
-      memo.skills.push(project.skill_id);
+      if (!memo[p].skills) {
+          memo[p].skills = [];
+      }
+      memo[p].skills.push(project.skill_id);
       return memo;
-    }, {});
-    return results;
+  }, {});
+    const projectsArray = Object.keys(reducedProjects).map(key => reducedProjects[key]);
+    return projectsArray;
   }
   catch (err) {
     console.log(err);
     throw err;
   }
-  /*
-  use reduce on the joined results:
-  .then(results => {
-            return results.reduce((memo, categoryEntry) => {
-                if (!memo.title){
-                    memo.title = categoryEntry.title;
-                }
-                if (!memo.categories) {
-                    memo.categories = [];
-                }
-                memo.categories.push(categoryEntry.category_title);
-                return memo;
-            }, {});
-}
-  */
   
 };
 const updateProject = async (id, projectObject) => {

@@ -96,7 +96,7 @@ describe("GET requests to /api/portfolio/projects", () => {
   it("should respond with full list of projects", async () => {
     const result = await request(server).get("/api/portfolio/projects");
     // expect(result.body.projects.length).toBe(2);
-    expect(result.body.projects).toBe({"asdf":"qwerty"})
+    expect(result.body.projects.length).toBe(2)
     expect(result.body.projects[0].title).toBe("Sample project");
     expect(result.body.projects[1].image).toBe("image-test.png");
     console.log(result.body.projects);
