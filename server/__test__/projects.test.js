@@ -14,6 +14,10 @@ beforeAll(async () => {
   await db("projects-skills").truncate();
   await db("skills").truncate();
   await db("projects").truncate();
+  const skill1 = { long_name: "test skill 1", short_name: "skill1", proficiency: 3 };
+  const skill2 = { long_name: "test skill 2", short_name: "skill2", proficiency: 2 };
+  await db('skills').insert(skill1);
+  await db('skills').insert(skill2);
 });
 /*
 BEHAVIOR
@@ -32,7 +36,7 @@ describe("GET requests to /api/portfolio/projects", () => {
   it("should respond with full list of projects", async () => {
     const result = await request(server).get("/api/portfolio/projects");
     expect(result.body.projects.length).toBe(0);
-    expect(result.body.skills.length).toBe(0);
+    expect(result.body.skills.length).toBe(2);
   });
 });
 
@@ -56,6 +60,7 @@ describe("POST requests to /api/portfolio/projects with NO image provided", () =
           title: "Sample project",
           url: "http://www.sampleproject.com/mockURL",
           description: "sample project - not real",
+          skills: [1,2]
         });
       expect(result.status).toBe(201);
       expect(result.body.addedProject.length).toBe(1);
@@ -76,6 +81,7 @@ describe("POST requests to /api/portfolio/projects with image attachment", () =>
         .field("title", "sample project 2")
         .field("description", "sample project 2 - also not real")
         .field("url", "http://www.sampleproject2.com")
+        .field("skills", [1,2])
         .attach("image", path.join(__dirname, "../images/test.png"));
       expect(result.status).toBe(201);
       expect(result.body.addedProject.length).toBe(1);
@@ -89,7 +95,8 @@ describe("POST requests to /api/portfolio/projects with image attachment", () =>
 describe("GET requests to /api/portfolio/projects", () => {
   it("should respond with full list of projects", async () => {
     const result = await request(server).get("/api/portfolio/projects");
-    expect(result.body.projects.length).toBe(2);
+    // expect(result.body.projects.length).toBe(2);
+    expect(result.body.projects).toBe({"asdf":"qwerty"})
     expect(result.body.projects[0].title).toBe("Sample project");
     expect(result.body.projects[1].image).toBe("image-test.png");
     console.log(result.body.projects);

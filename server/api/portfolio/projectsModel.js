@@ -8,7 +8,7 @@ const addProject = async (projectObject, skills) => {
     }
     const newProject = { ...projectObject, rank };
     const result = await db.transaction(async (trx) => {
-      const id = await db("projects")
+      const project_id = await db("projects")
         .transacting(trx)
         .insert(newProject);
       if (skills.length > 0) {
@@ -18,7 +18,7 @@ const addProject = async (projectObject, skills) => {
         }));
         await db("projects-skills").transacting(trx).insert(skillsArray);
       }
-      return id;
+      return project_id;
     });
     return result;
   } catch (err) {
@@ -28,26 +28,35 @@ const addProject = async (projectObject, skills) => {
 };
 
 const listProjects = async () => {
-  //this needs to append a skills array based on a join(?)
-  return await db("projects").innerJoin("projects-skills");
+  try {
+    const results = await db('projects').join("projects-skills", 'projects-skills.project_id', "=", 'projects.id');
+    const reducedResults = results.reduce((memo, project) => {
+      if (!memo.skills) {
+        memo.skills = []
+      }
+      memo.skills.push(project.skill_id);
+      return memo;
+    }, {});
+    return results;
+  }
+  catch (err) {
+    console.log(err);
+    throw err;
+  }
   /*
-  this knex query should probably work
-   knex('users')
-    .innerJoin('user_emails','users.id','user_emails.user_id')
-    .select([
-      'users.id as userID',
-      'users.name as userName',
-      knex.raw('ARRAY_AGG(user_emails.adress) as email')
-    ])
-    .groupBy('users.id','users.name')
-  */
-  
-  /*
-  knex has pluck, should work even better
-    User.pluck(:id)
-
-    # => (0.9ms)  SELECT "users"."id" FROM "users"
-    # => [12, 42, 1, 24, 200, ..., 365]
+  use reduce on the joined results:
+  .then(results => {
+            return results.reduce((memo, categoryEntry) => {
+                if (!memo.title){
+                    memo.title = categoryEntry.title;
+                }
+                if (!memo.categories) {
+                    memo.categories = [];
+                }
+                memo.categories.push(categoryEntry.category_title);
+                return memo;
+            }, {});
+}
   */
   
 };
