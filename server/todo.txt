@@ -1,0 +1,2 @@
+check if deleting project deletes data from projects-skills table
+what happens if a new rank is assigned that is much higher than the highest possible rank, or less than 0, etc

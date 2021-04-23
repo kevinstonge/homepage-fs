@@ -65,8 +65,8 @@ router.put(
         !req.file?.filename &&
         !req.body.github &&
         !req.body.url &&
-        !req.body.rank &&  //not sure if I should keep rank here
-        !req.body.skills //not sure if I should keep skills here
+        !req.body.rank &&
+        !req.body.skills 
       ) {
         res.status(400).json({
           message: "error: no valid values provided to update, no changes made",
