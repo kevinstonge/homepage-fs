@@ -47,7 +47,6 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
       });
     }
   } catch (err) {
-    console.log('712360912760921736021937601293602193------------')
     console.log(err);
     res.status(500).json({ message: "server failed to create the project" });
     throw err;
