@@ -108,7 +108,6 @@ const updateProject = async (id, projectObject) => {
   }
 };
 const deleteProject = async (id) => {
-  return await db("projects").where({ id }).del();
-  //todo: delete associated skills (does knex do this automatically with cascade?)
+    return await db("projects").where({ id }).del();
 };
 module.exports = { addProject, listProjects, updateProject, deleteProject };

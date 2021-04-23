@@ -19,18 +19,18 @@ exports.up = function (knex) {
       skills.integer("proficiency");
     })
     .createTable("projects-skills", (bridge) => {
+      bridge.integer("project_id").unsigned();
       bridge
-        .integer("project_id")
+        .foreign("project_id")
+        .onDelete("CASCADE")
         .references("id")
-        .inTable("projects")
-        .onDelete("cascade")
-        .notNullable();
+        .inTable("projects");
+      bridge.integer("skill_id").unsigned();
       bridge
-        .integer("skill_id")
+        .foreign("skill_id")
+        .onDelete("CASCADE")
         .references("id")
-        .inTable("skills")
-        .onDelete("cascade")
-        .notNullable();
+        .inTable("skills");
     })
     .createTable("admin", (admin) => {
       admin.increments();

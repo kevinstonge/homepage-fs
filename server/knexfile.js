@@ -5,6 +5,9 @@ module.exports = {
     migrations: { directory: "./data/migrations" },
     seeds: { directory: "./data/seeds" },
     useNullAsDefault: true,
+    pool: {
+      afterCreate: (conn, cb) => { conn.run('PRAGMA foreign_keys = ON', cb) }
+    },
   },
   testing: {
     client: "sqlite3",
@@ -12,6 +15,9 @@ module.exports = {
     migrations: { directory: "./data/migrations" },
     seeds: { directory: "./data/seeds" },
     useNullAsDefault: true,
+    pool: {
+      afterCreate: (conn, cb) => { conn.run('PRAGMA foreign_keys = ON', cb) }
+    },
   },
   production: {
     client: "pg",
@@ -19,5 +25,8 @@ module.exports = {
     ssl: { rejectUnauthorized: false },
     migrations: { directory: "./data/migrations" },
     seeds: { directory: "./data/seeds" },
+    pool: {
+      afterCreate: (conn, cb) => { conn.run('PRAGMA foreign_keys = ON', cb) }
+    },
   },
 };
