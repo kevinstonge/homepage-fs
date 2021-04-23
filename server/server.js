@@ -1,15 +1,13 @@
 const express = require("express");
 const server = express();
 server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 const helmet = require("helmet");
-// server.use(helmet());
+server.use(helmet());
 const cors = require("cors");
 server.use(cors());
 const cp = require("cookie-parser");
 server.use(cp());
-var bodyParser = require("body-parser");
-server.use(bodyParser.urlencoded({ extended: true }));
-server.use(bodyParser.json());
 const path = require("path");
 // server.use((req, res, next) => {
 //   res.setHeader(
