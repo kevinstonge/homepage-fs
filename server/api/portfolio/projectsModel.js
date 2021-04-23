@@ -73,8 +73,26 @@ const updateProject = async (id, projectObject) => {
       }
       delete projectObject.skills;
     }
-    //todo: write special case for when rank is updated
 
+    if (projectObject.rank) {
+      const reRank = await db.transaction(async (trx) => {
+        const oldProjectObject = await db('projects').transacting(trx).where({ id });
+        const oldRank = oldProjectObject[0].rank;
+        await db('projects').transacting(trx).where({ id }).update({ rank: projectObject.rank });
+        await db('projects').transacting(trx)
+          .whereNot('id', '=', id)
+          .andWhere('rank', '>=', projectObject.rank)
+          .andWhere('rank', '<', oldRank)
+          .increment('rank', 1);
+        return true;
+      });
+      if (reRank) {
+        delete projectObject.rank;
+      }
+      else {
+        res.status(500).json({message: "error changing the ranking of the projects"})
+      }
+    }
 
     if (Object.keys(projectObject).length > 0) {
       return await db("projects").where({ id }).update(projectObject);

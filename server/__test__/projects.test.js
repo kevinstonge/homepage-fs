@@ -145,15 +145,27 @@ describe("PUT requests to /api/portfolio/projects/:id with associated skills cha
   });
 });
 
-//----------- below not started
 
-// describe("DELETE requests to /api/portfolio/skills/:id", () => {
-//   it("should respond with status 200, subsequent GET request should not contain deleted item", async () => {
-//     const result = await request(server)
-//       .delete("/api/portfolio/skills/1")
-//       .set("Cookie", goodCookie);
-//     expect(result.status).toBe(200);
-//     const newSkills = await request(server).get("/api/portfolio/skills");
-//     expect(newSkills.body.skills.length).toBe(1);
-//   });
-// });
+describe("PUT requests to /api/portfolio/projects/:id with rank changed", () => {
+  it("should respond with status 200", async () => {
+    const result = await request(server)
+      .put("/api/portfolio/projects/2")
+      .set("Cookie", goodCookie)
+      .field("rank", 1)
+    expect(result.status).toBe(200);
+    const newProjects = await request(server).get("/api/portfolio/projects");
+    expect(newProjects.body.projects[1].rank).toStrictEqual(1);
+    expect(newProjects.body.projects[1].id).toStrictEqual(2);
+  });
+});
+
+describe("DELETE requests to /api/portfolio/projects/:id", () => {
+  it("should respond with status 200, subsequent GET request should not contain deleted item", async () => {
+    const result = await request(server)
+      .delete("/api/portfolio/projects/2")
+      .set("Cookie", goodCookie);
+    expect(result.status).toBe(200);
+    const newProjects = await request(server).get("/api/portfolio/projects");
+    expect(newProjects.body.projects.length).toBe(1);
+  });
+});
