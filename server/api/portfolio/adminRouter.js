@@ -5,9 +5,6 @@ const authenticate = require("./middleware/authenticate.js");
 const login = require("./adminModel.js");
 const jwt = require("jsonwebtoken");
 
-// this router is invoked by /admin path
-
-//check cookies for authentication
 router.get("*", (req, res) => {
   if (authenticate(req)) {
     //if authenticated, send to admin/build/index.html

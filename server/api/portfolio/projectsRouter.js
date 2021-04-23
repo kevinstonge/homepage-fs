@@ -73,7 +73,6 @@ router.put(
         });
       } else { 
         const revisedProject = {
-          //put requests to revise Projects can include only the properties to be changed:
           ...(req.body.title && { title: req.body.title }),
           ...(req.body.description && { description: req.body.description }),
           ...(req.file?.filename && { image: req.file.filename }),
@@ -100,7 +99,6 @@ router.put(
     }
   }
 );
-
 router.delete("/:id", [auth, projectExists], async (req, res) => {
   try {
     const deleted = await Projects.deleteProject(req.params.id);

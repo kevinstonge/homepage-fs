@@ -13,7 +13,6 @@ const addProject = async (projectObject, skills) => {
         .transacting(trx)
         .insert(newProject);
       if (skills.length > 0) {
-          //converting skills to set and back to array to remove duplicates (just incase they are passed through somehow);
           const skillsArray = [...new Set(skills)].map((skill) => ({
           project_id,
           skill_id: skill,

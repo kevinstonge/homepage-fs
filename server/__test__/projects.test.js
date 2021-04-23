@@ -19,18 +19,6 @@ beforeAll(async () => {
   await db('skills').insert(skill1);
   await db('skills').insert(skill2);
 });
-/*
-BEHAVIOR
-project ranking:
-projects will have unique rank - when rank of one is changed, each lower-ranked project must be moved down a rank (rank++) until the rank value of the changed project is reached, this must be done as a 'transaction'. 
-on the frontend, rank will be drag and drop, position based
-
-skills-project bridge:
-bridge table between project_id and skill_id - need to query this table for each project, add skill_id list to project json for each project. 
-
-//projects table columns: title, description, image, github, url, rank
-*/
-
 
 describe("GET requests to /api/portfolio/projects", () => {
   it("should respond with full list of projects", async () => {
@@ -95,7 +83,6 @@ describe("POST requests to /api/portfolio/projects with image attachment", () =>
 describe("GET requests to /api/portfolio/projects", () => {
   it("should respond with full list of projects", async () => {
     const result = await request(server).get("/api/portfolio/projects");
-    // expect(result.body.projects.length).toBe(2);
     expect(result.body.projects.length).toBe(2)
     expect(result.body.projects[0].title).toBe("Sample project");
     expect(result.body.projects[1].image).toBe("image-test.png");
