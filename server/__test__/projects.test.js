@@ -10,14 +10,23 @@ beforeAll(async () => {
     .send({ username: "kevinstonge", password: process.env.pw });
   if (loginRequest.header["set-cookie"]) {
     goodCookie = loginRequest.header["set-cookie"];
+    console.log(goodCookie);
   }
   await db("projects-skills").truncate();
   await db("skills").truncate();
   await db("projects").truncate();
-  const skill1 = { long_name: "test skill 1", short_name: "skill1", proficiency: 3 };
-  const skill2 = { long_name: "test skill 2", short_name: "skill2", proficiency: 2 };
-  await db('skills').insert(skill1);
-  await db('skills').insert(skill2);
+  const skill1 = {
+    long_name: "test skill 1",
+    short_name: "skill1",
+    proficiency: 3,
+  };
+  const skill2 = {
+    long_name: "test skill 2",
+    short_name: "skill2",
+    proficiency: 2,
+  };
+  await db("skills").insert(skill1);
+  await db("skills").insert(skill2);
 });
 
 describe("GET requests to /api/portfolio/projects", () => {
@@ -48,16 +57,15 @@ describe("POST requests to /api/portfolio/projects with NO image provided", () =
           title: "Sample project",
           url: "http://www.sampleproject.com/mockURL",
           description: "sample project - not real",
-          skills: [1,2]
+          skills: [1, 2],
         });
       expect(result.status).toBe(201);
       expect(result.body.addedProject.length).toBe(1);
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
       throw err;
     }
-    });
+  });
 });
 
 describe("POST requests to /api/portfolio/projects with image attachment", () => {
@@ -69,7 +77,7 @@ describe("POST requests to /api/portfolio/projects with image attachment", () =>
         .field("title", "sample project 2")
         .field("description", "sample project 2 - also not real")
         .field("url", "http://www.sampleproject2.com")
-        .field("skills", [1,2])
+        .field("skills", [1, 2])
         .attach("image", path.join(__dirname, "../images/test.png"));
       expect(result.status).toBe(201);
       expect(result.body.addedProject.length).toBe(1);
@@ -83,7 +91,7 @@ describe("POST requests to /api/portfolio/projects with image attachment", () =>
 describe("GET requests to /api/portfolio/projects", () => {
   it("should respond with full list of projects", async () => {
     const result = await request(server).get("/api/portfolio/projects");
-    expect(result.body.projects.length).toBe(2)
+    expect(result.body.projects.length).toBe(2);
     expect(result.body.projects[0].title).toBe("Sample project");
     expect(result.body.projects[1].image).toBe("image-test.png");
     expect(result.body.skills.length).toBe(2);
@@ -116,7 +124,9 @@ describe("PUT requests to /api/portfolio/projects/:id with one value changed", (
       .field("description", "modified description for project 1");
     expect(result.status).toBe(200);
     const newSkills = await request(server).get("/api/portfolio/projects");
-    expect(newSkills.body.projects[0].description).toBe("modified description for project 1");
+    expect(newSkills.body.projects[0].description).toBe(
+      "modified description for project 1"
+    );
   });
 });
 
@@ -125,20 +135,19 @@ describe("PUT requests to /api/portfolio/projects/:id with associated skills cha
     const result = await request(server)
       .put("/api/portfolio/projects/1")
       .set("Cookie", goodCookie)
-      .field("skills", "[1]")
+      .field("skills", "[1]");
     expect(result.status).toBe(200);
     const newProjects = await request(server).get("/api/portfolio/projects");
     expect(newProjects.body.projects[0].skills).toStrictEqual([1]);
   });
 });
 
-
 describe("PUT requests to /api/portfolio/projects/:id with rank changed", () => {
   it("should respond with status 200", async () => {
     const result = await request(server)
       .put("/api/portfolio/projects/2")
       .set("Cookie", goodCookie)
-      .field("rank", 1)
+      .field("rank", 1);
     expect(result.status).toBe(200);
     const newProjects = await request(server).get("/api/portfolio/projects");
     expect(newProjects.body.projects[1].rank).toStrictEqual(1);

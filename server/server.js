@@ -4,6 +4,14 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 const helmet = require("helmet");
 server.use(helmet());
+server.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'", "*.kevinstonge.com"],
+      upgradeInsecureRequests: [],
+    },
+  })
+);
 const cors = require("cors");
 server.use(cors());
 const cp = require("cookie-parser");

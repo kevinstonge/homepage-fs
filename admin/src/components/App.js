@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import '../styles/App.scss';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import "../styles/App.scss";
 import Header from "./Header.js";
 import Projects from "./Projects.js";
 import Skills from "./Skills.js";
