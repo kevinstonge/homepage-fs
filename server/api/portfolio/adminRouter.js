@@ -37,12 +37,8 @@ router.post("/login", async (req, res) => {
     const password = req.body.password || "invalid";
     const authorized = await login({ username, password });
     if (authorized) {
-      res
-        .cookie(
-          "auth",
-          jwt.sign({ user: req.body.user }, process.env.JWT_SECRET)
-        )
-        .redirect("/admin");
+      const token = jwt.sign({ user: req.body.user }, process.env.JWT_SECRET);
+      res.cookie("auth", token).json({ token }).redirect("/admin");
     } else {
       console.log("unauthorized");
       res.redirect("/admin");
