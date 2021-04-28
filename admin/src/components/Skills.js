@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 export default function Skills() {
-  const [skills, setSkills] = useState([]);
+  const [skillForm, setSkillForm] = useState({ saved: [], local: [] });
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/api/portfolio/skills`, {
@@ -12,23 +12,37 @@ export default function Skills() {
         },
       })
       .then((r) => {
-        setSkills(r.data.skills);
+        setSkillForm({ saved: [...r.data.skills], local: [...r.data.skills] });
       })
       .catch((e) => console.log(e));
   }, []);
-  console.log(skills);
   return (
     <>
       <h2>skills</h2>
-      {skills?.length > 0 &&
-        skills.map((skill) => {
+      {skillForm.local.length > 0 &&
+        skillForm.local.map((skill, index) => {
           return (
-            <div key={`skill-${skill.id}`}>
-              <p>{skill.long_name}</p>
+            <form key={`skill-${skill.id}`}>
+              <input
+                type="text"
+                value={skillForm.local[index].long_name}
+                // className={
+                //   skillForm[index].long_name === skills[index].long_name
+                //     ? "unchanged"
+                //     : "changed"
+                // }
+                onChange={(e) => {
+                  const newSkillForm = { ...skillForm };
+                  console.log(newSkillForm.saved[index]);
+                  newSkillForm.local[index].long_name = e.target.value;
+                  console.log(newSkillForm.saved[index]);
+                  setSkillForm({ ...newSkillForm });
+                }}
+              />
               <p>{skill.short_name}</p>
               <p>{skill.proficiency}</p>
               <p>{skill.logo}</p>
-            </div>
+            </form>
           );
         })}
     </>
