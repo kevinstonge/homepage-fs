@@ -75,9 +75,12 @@ body {
     button {
       background-color: $b4;
       color: $f1;
-      border: 1px solid $b2;
+      border: 1px solid $e1;
       &:focus {
         outline: 1px solid $f1;
+      }
+      &:disabled {
+        border: 1px solid $b2;
       }
     }
   }

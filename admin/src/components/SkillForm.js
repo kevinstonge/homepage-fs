@@ -2,12 +2,20 @@ export default function SkillForm(props) {
     const { skill, index, skillForm, setSkillForm } = props;
     const buttonsDisabled = { apply: true, revert: true };
     const setButtons = () => {
-        console.log('setbuttons');
+        const local = skillForm.local[index];
+        const saved = skillForm.saved[index];
+        const identical = !Object.entries(local).map((entry) => {
+            return (entry[1] === saved[entry[0]])
+        }).some((b) => b === false);
+        console.log(identical);
+        buttonsDisabled.apply = identical;
     }
     const changeHandler = (e) => {
         const newSkillForm = { ...skillForm };
         newSkillForm.local[index][e.target.name] = e.target.value;
-        if (parseInt(e.target.value)) { newSkillForm.local[index][e.target.name] = parseInt(e.target.value)}
+        if (parseInt(e.target.value)) {
+            newSkillForm.local[index][e.target.name] = parseInt(e.target.value)
+        }
         setSkillForm({ ...newSkillForm });
         setButtons();
     }
@@ -84,8 +92,8 @@ export default function SkillForm(props) {
             </select>
         </label>
         <span className="button-column">
-            <button type="submit" disabled={true}>apply</button>
-            <button disabled={true}>revert</button>
+            <button type="submit" disabled={buttonsDisabled.apply}>apply</button>
+            <button disabled={buttonsDisabled.revert}>revert</button>
         </span>
 
     </form>
