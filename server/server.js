@@ -35,8 +35,8 @@ server.use(
   "/api/portfolio/projects",
   require("./api/portfolio/projectsRouter.js")
 );
+server.use("/images", express.static("./images"));
 server.use(express.static("../client/build/"));
-
 server.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });

@@ -24,9 +24,45 @@ body {
   #contentContainer {
     background-color: $b2;
     padding: 0.5rem;
+    @include flexC();
+    form {
+      @include flexR();
+      @include phone {
+        @include flexC();
+      }
+      background-color: $b3;
+      padding: 0.25rem;
+      label {
+        @include flexC();
+        justify-content: stretch;
+        gap: 0.2rem;
+        input,
+        select {
+          background-color: $b4;
+          color: $f2;
+          border: 1px solid $b2;
+          padding: 0.2rem;
+          &:focus {
+            outline: 1px solid $f1;
+          }
+          &.changed {
+            border-bottom-color: $changed;
+          }
+        }
+        input[type="file"] {
+          display: none;
+        }
+      }
+    }
   }
   a {
     color: unset;
     text-decoration: unset;
+  }
+  img.logo {
+    width: 3rem;
+    &:hover {
+      cursor: pointer;
+    }
   }
 }

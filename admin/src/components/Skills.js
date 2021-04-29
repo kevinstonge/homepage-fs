@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import SkillForm from "./SkillForm.js";
 export default function Skills() {
   const [skillForm, setSkillForm] = useState({ saved: [], local: [] });
   useEffect(() => {
@@ -26,27 +27,10 @@ export default function Skills() {
       {skillForm.local.length > 0 &&
         skillForm.local.map((skill, index) => {
           return (
-            <form key={`skill-${skill.id}`}>
-              <input
-                type="text"
-                value={skillForm.local[index].long_name}
-                className={
-                  skillForm.local[index].long_name === skillForm.saved[index].long_name
-                    ? "unchanged"
-                    : "changed"
-                }
-                onChange={(e) => {
-                  const newSkillForm = { ...skillForm };
-                  newSkillForm.local[index].long_name = e.target.value;
-                  setSkillForm({ ...newSkillForm });
-                }}
-              />
-              <p>{skill.short_name}</p>
-              <p>{skill.proficiency}</p>
-              <p>{skill.logo}</p>
-            </form>
+            SkillForm({skill, index, skillForm, setSkillForm})
           );
         })}
+      <p style={{fontSize:"smaller"}}>*required</p>
     </>
   );
 }

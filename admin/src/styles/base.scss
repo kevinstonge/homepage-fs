@@ -1,15 +1,30 @@
 $b1: #111;
-$b2: #222;
-$b3: #333;
+$b2: #181818;
+$b3: #222;
+$b4: #282828;
 $f1: #ccc;
 $f2: #ddd;
 $f3: #eee;
 $e1: #1c1;
 $e2: #c1c;
+$changed: #f95;
 @mixin phone {
   @media (max-width: 500px) {
     @content;
   }
+}
+@mixin flexC {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+@mixin flexR {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
 }
 @mixin button($bg, $fg) {
   color: $fg;
