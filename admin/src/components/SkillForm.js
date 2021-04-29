@@ -1,5 +1,16 @@
 export default function SkillForm(props) {
     const { skill, index, skillForm, setSkillForm } = props;
+    const buttonsDisabled = { apply: true, revert: true };
+    const setButtons = () => {
+        console.log('setbuttons');
+    }
+    const changeHandler = (e) => {
+        const newSkillForm = { ...skillForm };
+        newSkillForm.local[index][e.target.name] = e.target.value;
+        if (parseInt(e.target.value)) { newSkillForm.local[index][e.target.name] = parseInt(e.target.value)}
+        setSkillForm({ ...newSkillForm });
+        setButtons();
+    }
     return(
         <form key={`skill-${skill.id}`} className="skillForm">
         <label htmlFor={`skill-${skill.id}-long_name`}>
@@ -8,15 +19,15 @@ export default function SkillForm(props) {
                 type="text"
                 value={skillForm.local[index].long_name}
                 id={`skill-${skill.id}-long_name`}
+                name="long_name"
                 className={
                     skillForm.local[index].long_name === skillForm.saved[index].long_name
                     ? "unchanged"
                     : "changed"
                 }
-                onChange={(e) => {
-                    const newSkillForm = { ...skillForm };
-                    newSkillForm.local[index].long_name = e.target.value;
-                    setSkillForm({ ...newSkillForm });
+                    onChange={(e) => {
+                        e.persist();
+                        changeHandler(e)
                 }}
             />
         </label>
@@ -26,15 +37,15 @@ export default function SkillForm(props) {
                 type="text"
                 value={skillForm.local[index].short_name}
                 id={`skill-${skill.id}-short_name`}
+                name="short_name"
                 className={
                     skillForm.local[index].short_name === skillForm.saved[index].short_name
                     ? "unchanged"
                     : "changed"
                 }
                 onChange={(e) => {
-                    const newSkillForm = { ...skillForm };
-                    newSkillForm.local[index].short_name = e.target.value;
-                    setSkillForm({ ...newSkillForm });
+                    e.persist();
+                    changeHandler(e)
                 }}
             />
         </label>
@@ -44,6 +55,7 @@ export default function SkillForm(props) {
                 <img src={`${process.env.REACT_APP_API}/images/test.png`} alt={`${skillForm.local[index].long_name}-logo`} className="logo"/>
                 <input
                     id={`skill-${skill.id}-logo`}
+                    name="logo"
                     type="file"
                 />
         </label>
@@ -54,15 +66,15 @@ export default function SkillForm(props) {
             <select
                 value={skillForm.local[index].proficiency}
                 id={`skill-${skill.id}-proficiency`}
+                name="proficiency"
                 className={
                     skillForm.local[index].proficiency === skillForm.saved[index].proficiency
                     ? "unchanged"
                     : "changed"
                 }
                 onChange={(e) => {
-                    const newSkillForm = { ...skillForm };
-                    newSkillForm.local[index].proficiency = parseInt(e.target.value);
-                    setSkillForm({ ...newSkillForm });
+                    e.persist();
+                    changeHandler(e)
                 }}
             >
                     <option value={1}>beginner</option>
@@ -71,7 +83,10 @@ export default function SkillForm(props) {
                     <option value={4}>expert</option>
             </select>
         </label>
-
+        <span className="button-column">
+            <button type="submit" disabled={true}>apply</button>
+            <button disabled={true}>revert</button>
+        </span>
 
     </form>
     )
