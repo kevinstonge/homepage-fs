@@ -12,7 +12,11 @@ export default function Skills() {
         },
       })
       .then((r) => {
-        setSkillForm({ saved: [...r.data.skills], local: [...r.data.skills] });
+        setSkillForm({
+          saved:
+            [...r.data.skills.map((skill) => { return ({ ...skill }) })],
+          local: [...r.data.skills.map((skill)=>{return({...skill})})]
+        });
       })
       .catch((e) => console.log(e));
   }, []);
@@ -26,16 +30,14 @@ export default function Skills() {
               <input
                 type="text"
                 value={skillForm.local[index].long_name}
-                // className={
-                //   skillForm[index].long_name === skills[index].long_name
-                //     ? "unchanged"
-                //     : "changed"
-                // }
+                className={
+                  skillForm.local[index].long_name === skillForm.saved[index].long_name
+                    ? "unchanged"
+                    : "changed"
+                }
                 onChange={(e) => {
                   const newSkillForm = { ...skillForm };
-                  console.log(newSkillForm.saved[index]);
                   newSkillForm.local[index].long_name = e.target.value;
-                  console.log(newSkillForm.saved[index]);
                   setSkillForm({ ...newSkillForm });
                 }}
               />
