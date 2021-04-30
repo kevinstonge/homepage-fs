@@ -1,32 +1,52 @@
+import { axiosWithAuth } from "../api/axios.js";
 export default function SkillForm(props) {
     const { skill, index, skillForm, setSkillForm } = props;
-    const changeHandler = async (e) => {
+    const setButtonsStatus = (data) => {
+        const local = data.local[index];
+        const saved = data.saved[index];
+        const identical = !Object.entries(local).map((entry) => {
+            return (entry[1] === saved[entry[0]])
+        }).some((b) => b === false);
+        data.buttons[index].apply = identical;
+        if (data.local[index].long_name.length === 0) {
+            data.buttons[index].apply = true;
+        }
+        data.buttons[index].revert = identical;
+        return data;
+    }
+    const changeHandler = (e) => {
         const newSkillForm = { ...skillForm };
         newSkillForm.local[index][e.target.name] = e.target.value;
         if (parseInt(e.target.value)) {
             newSkillForm.local[index][e.target.name] = parseInt(e.target.value)
         }
-
         if (e.target.name === "logo") {
-            console.log('logo change');
-            newSkillForm.local[index].localLogo = await URL.createObjectURL(e.target.files[0]);
+            newSkillForm.local[index].localLogo = URL.createObjectURL(e.target.files[0]);
         }
-
-        const local = newSkillForm.local[index];
-        const saved = newSkillForm.saved[index];
-        const identical = !Object.entries(local).map((entry) => {
-            return (entry[1] === saved[entry[0]])
-        }).some((b) => b === false);
-        newSkillForm.buttons[index].apply = identical;
-        if (newSkillForm.local[index].long_name.length === 0) {
-            newSkillForm.buttons[index].apply = true;
-        }
-        newSkillForm.buttons[index].revert = identical;
-        console.log(newSkillForm.local[index]);
-        setSkillForm({ ...newSkillForm });
+        setSkillForm({ ...setButtonsStatus(newSkillForm) });
+    }
+    const revertHandler = (e) => {
+        const newSkillForm = { ...skillForm }
+        newSkillForm.local[index] = { ...skillForm.saved[index] }
+        setSkillForm({ ...setButtonsStatus(newSkillForm) });
+    }
+    const submitHandler = () => {
+        const submission = { ...skillForm.local[index] }
+        delete submission.localLogo;
+        axiosWithAuth.put(`/api/portfolio/skills/${index}`, submission).then(r => {
+            console.log(r);
+        })
     }
     return (
-        <form key={`skill-${skill.id}`} className="skillForm">
+        <form
+            key={`skill-${skill.id}`}
+            className="skillForm"
+            onSubmit={(e) => {
+                e.preventDefault();
+                e.persist();
+                submitHandler();
+            }}
+        >
         <label htmlFor={`skill-${skill.id}-long_name`}>
             <p>long name*:</p>
             <input
@@ -102,8 +122,21 @@ export default function SkillForm(props) {
             </select>
         </label>
         <span className="button-column">
-            <button type="submit" disabled={skillForm.buttons[index].apply}>apply</button>
-            <button disabled={skillForm.buttons[index].revert}>revert</button>
+            <button
+                type="submit"
+                disabled={skillForm.buttons[index].apply}
+            >
+                apply
+            </button>
+            <button
+                disabled={skillForm.buttons[index].revert}
+                    onClick={(e) => {
+                        e.preventDefault();
+                    e.persist();
+                    revertHandler(e)
+            }}>
+                revert
+            </button>
         </span>
 
     </form>
