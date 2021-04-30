@@ -1,11 +1,17 @@
 export default function SkillForm(props) {
     const { skill, index, skillForm, setSkillForm } = props;
-    const changeHandler = (e) => {
+    const changeHandler = async (e) => {
         const newSkillForm = { ...skillForm };
         newSkillForm.local[index][e.target.name] = e.target.value;
         if (parseInt(e.target.value)) {
             newSkillForm.local[index][e.target.name] = parseInt(e.target.value)
         }
+
+        if (e.target.name === "logo") {
+            console.log('logo change');
+            newSkillForm.local[index].localLogo = await URL.createObjectURL(e.target.files[0]);
+        }
+
         const local = newSkillForm.local[index];
         const saved = newSkillForm.saved[index];
         const identical = !Object.entries(local).map((entry) => {
@@ -16,9 +22,9 @@ export default function SkillForm(props) {
             newSkillForm.buttons[index].apply = true;
         }
         newSkillForm.buttons[index].revert = identical;
+        console.log(newSkillForm.local[index]);
         setSkillForm({ ...newSkillForm });
     }
-    const logo = `${process.env.REACT_APP_API}/images/${skillForm.local[index].logo}`;
     return (
         <form key={`skill-${skill.id}`} className="skillForm">
         <label htmlFor={`skill-${skill.id}-long_name`}>
@@ -60,11 +66,15 @@ export default function SkillForm(props) {
 
         <label htmlFor={`skill-${skill.id}-logo`}>
             <p>logo:</p>
-                <img src={logo} alt={`${skillForm.local[index].long_name}-logo`} className="logo"/>
+                <img src={skillForm.local[index].localLogo} alt={`${skillForm.local[index].long_name}-logo`} className="logo"/>
                 <input
                     id={`skill-${skill.id}-logo`}
                     name="logo"
                     type="file"
+                    onChange={(e) => {
+                        e.persist();
+                        changeHandler(e);
+                    }}
                 />
         </label>
             

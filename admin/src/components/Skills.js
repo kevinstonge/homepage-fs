@@ -13,10 +13,23 @@ export default function Skills() {
         },
       })
       .then((r) => {
+        const logoPath = `${process.env.REACT_APP_API}/images`;
         setSkillForm({
           saved:
-            [...r.data.skills.map((skill) => { return ({ ...skill }) })],
-          local: [...r.data.skills.map((skill) => { return ({ ...skill }) })],
+            [...r.data.skills.map((skill) => {
+              return ({
+                ...skill,
+                localLogo: (skill.logo === null) ? `${logoPath}/defaultLogo.png` : `${logoPath}/${skill.logo}`
+              })
+            })],
+          local: [
+            ...r.data.skills.map((skill) => {
+              return ({
+                ...skill,
+                localLogo: (skill.logo === null) ? `${logoPath}/defaultLogo.png` : `${logoPath}/${skill.logo}`
+              })
+            })
+          ],
           buttons: [...r.data.skills.map((skill)=>{return({apply:true,revert:true})})]
         });
       })
