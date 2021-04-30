@@ -32,8 +32,9 @@ export default function SkillForm(props) {
     }
     const submitHandler = () => {
         const submission = { ...skillForm.local[index] }
+        submission.logo = submission.localLogo;
         delete submission.localLogo;
-        axiosWithAuth.put(`/api/portfolio/skills/${index}`, submission).then(r => {
+        axiosWithAuth.put(`/api/portfolio/skills/${skill.id}`, submission).then(r => {
             console.log(r);
         })
     }
