@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import SkillForm from "./SkillForm.js";
 export default function Skills() {
-  const [skillForm, setSkillForm] = useState({ saved: [], local: [] });
+  const [skillForm, setSkillForm] = useState({ saved: [], local: [], buttons: [] });
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/api/portfolio/skills`, {
@@ -16,7 +16,8 @@ export default function Skills() {
         setSkillForm({
           saved:
             [...r.data.skills.map((skill) => { return ({ ...skill }) })],
-          local: [...r.data.skills.map((skill)=>{return({...skill})})]
+          local: [...r.data.skills.map((skill) => { return ({ ...skill }) })],
+          buttons: [...r.data.skills.map((skill)=>{return({apply:true,revert:true})})]
         });
       })
       .catch((e) => console.log(e));

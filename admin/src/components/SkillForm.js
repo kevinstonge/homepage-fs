@@ -1,25 +1,25 @@
 export default function SkillForm(props) {
     const { skill, index, skillForm, setSkillForm } = props;
-    const buttonsDisabled = { apply: true, revert: true };
-    const setButtons = () => {
-        const local = skillForm.local[index];
-        const saved = skillForm.saved[index];
-        const identical = !Object.entries(local).map((entry) => {
-            return (entry[1] === saved[entry[0]])
-        }).some((b) => b === false);
-        console.log(identical);
-        buttonsDisabled.apply = identical;
-    }
     const changeHandler = (e) => {
         const newSkillForm = { ...skillForm };
         newSkillForm.local[index][e.target.name] = e.target.value;
         if (parseInt(e.target.value)) {
             newSkillForm.local[index][e.target.name] = parseInt(e.target.value)
         }
+        const local = newSkillForm.local[index];
+        const saved = newSkillForm.saved[index];
+        const identical = !Object.entries(local).map((entry) => {
+            return (entry[1] === saved[entry[0]])
+        }).some((b) => b === false);
+        newSkillForm.buttons[index].apply = identical;
+        if (newSkillForm.local[index].long_name.length === 0) {
+            newSkillForm.buttons[index].apply = true;
+        }
+        newSkillForm.buttons[index].revert = identical;
         setSkillForm({ ...newSkillForm });
-        setButtons();
     }
-    return(
+    const logo = `${process.env.REACT_APP_API}/images/${skillForm.local[index].logo}`;
+    return (
         <form key={`skill-${skill.id}`} className="skillForm">
         <label htmlFor={`skill-${skill.id}-long_name`}>
             <p>long name*:</p>
@@ -60,7 +60,7 @@ export default function SkillForm(props) {
 
         <label htmlFor={`skill-${skill.id}-logo`}>
             <p>logo:</p>
-                <img src={`${process.env.REACT_APP_API}/images/test.png`} alt={`${skillForm.local[index].long_name}-logo`} className="logo"/>
+                <img src={logo} alt={`${skillForm.local[index].long_name}-logo`} className="logo"/>
                 <input
                     id={`skill-${skill.id}-logo`}
                     name="logo"
@@ -92,8 +92,8 @@ export default function SkillForm(props) {
             </select>
         </label>
         <span className="button-column">
-            <button type="submit" disabled={buttonsDisabled.apply}>apply</button>
-            <button disabled={buttonsDisabled.revert}>revert</button>
+            <button type="submit" disabled={skillForm.buttons[index].apply}>apply</button>
+            <button disabled={skillForm.buttons[index].revert}>revert</button>
         </span>
 
     </form>
