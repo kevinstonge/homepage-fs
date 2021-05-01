@@ -1,4 +1,4 @@
-import { axiosWithAuth } from "../api/axios.js";
+import { axiosWithAuth, axiosWithAuthMulti } from "../api/axios.js";
 export default function SkillForm(props) {
     const { skill, index, skillForm, setSkillForm } = props;
     const setButtonsStatus = (data) => {
@@ -30,13 +30,23 @@ export default function SkillForm(props) {
         newSkillForm.local[index] = { ...skillForm.saved[index] }
         setSkillForm({ ...setButtonsStatus(newSkillForm) });
     }
-    const submitHandler = () => {
+    const submitHandler = (e) => {
         const submission = { ...skillForm.local[index] }
-        submission.logo = submission.localLogo;
-        delete submission.localLogo;
-        axiosWithAuth.put(`/api/portfolio/skills/${skill.id}`, submission).then(r => {
-            console.log(r);
-        })
+        if (skillForm.local[index].logo !== skillForm.saved[index].logo) {
+            const formData = new FormData();
+            formData.append("long_name", e.target["long_name"].value);
+            formData.append("short_name", e.target["short_name"].value);
+            formData.append("proficiency", e.target["proficiency"].value);
+            formData.append("logo", e.target["logo"].files[0]);
+            axiosWithAuthMulti.put(`/api/portfolio/skills/${skill.id}`, formData).then(r => console.log(r));
+        }
+        else {
+            delete submission.localLogo;
+            delete submission.logo;
+            axiosWithAuth.put(`/api/portfolio/skills/${skill.id}`, submission).then(r => {
+                console.log(r);
+            })
+        }
     }
     return (
         <form
@@ -45,7 +55,7 @@ export default function SkillForm(props) {
             onSubmit={(e) => {
                 e.preventDefault();
                 e.persist();
-                submitHandler();
+                submitHandler(e);
             }}
         >
         <label htmlFor={`skill-${skill.id}-long_name`}>

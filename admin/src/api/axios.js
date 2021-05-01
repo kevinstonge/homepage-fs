@@ -9,4 +9,12 @@ export const axiosWithAuth = axios.create({
         Authorization: `Bearer ${token}`
     }
 });
-export const axiosWithoutAuth = axios.create({baseURL})
+export const axiosWithoutAuth = axios.create({ baseURL })
+
+export const axiosWithAuthMulti = axios.create({
+    baseURL,
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+    }
+})
