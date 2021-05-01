@@ -69,18 +69,33 @@ body {
       cursor: pointer;
     }
   }
-  .button-column {
+  .form-buttons {
     @include flexC();
-    gap: 0.1rem;
+    @include phone {
+      @include flexR();
+      justify-content: center;
+    }
+    gap: 0.3rem;
     button {
+      cursor: pointer;
       background-color: $b4;
       color: $f1;
       border: 1px solid $e1;
+      &.apply {
+        color: $e1;
+        border: 1px solid $e1;
+      }
+      &.revert {
+        color: $changed;
+        border: 1px solid $changed;
+      }
       &:focus {
         outline: 1px solid $f1;
       }
       &:disabled {
+        color: darken($f1, 40%);
         border: 1px solid $b2;
+        cursor: default;
       }
     }
   }
