@@ -15,6 +15,7 @@ router.get("/", async (req, res) => {
   }
 });
 router.post("/", [auth, upload.single("logo")], async (req, res) => {
+  console.log(req.body.long_name);
   //long_name (required), short_name, logo, proficiency
   try {
     if (req.body.long_name && req.body.long_name.length > 0) {

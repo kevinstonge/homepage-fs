@@ -1,6 +1,5 @@
-import { axiosWithAuth, axiosWithAuthMulti } from "../api/axios.js";
+import { axiosWithAuth } from "../api/axios.js";
 export default function SkillForm(props) {
-  console.log(props.skill);
   const { skill, index, skillForm, setSkillForm } = props;
   const setButtonsStatus = (data) => {
     const local = data.local[index];
@@ -36,7 +35,7 @@ export default function SkillForm(props) {
     setSkillForm({ ...setButtonsStatus(newSkillForm) });
   };
   const axiosResponseHandler = (r) => {
-    if (r.status === 200) {
+    if (r.status === 200 || r.status === 201) {
       const newSkillForm = skillForm;
       newSkillForm.saved = [
         ...newSkillForm.local.map((skill) => {
@@ -49,27 +48,33 @@ export default function SkillForm(props) {
     }
   };
   const submitHandler = (e) => {
-    const submission = { ...skillForm.local[index] };
+    const logoChanged =
+      skillForm.local[index].logo === skillForm.saved[index].logo;
+    const contentTypeHeader = logoChanged
+      ? "multipart/form"
+      : "application/x-www-form-urlencoded";
+    const method = index === 0 ? "post" : "put";
+    const url =
+      index === 0
+        ? `api/portfolio/skills/`
+        : `api/portfolio/skills/${skill.id}`;
+    const formData = new FormData();
+    formData.append("long_name", e.target["long_name"].value);
+    formData.append("short_name", e.target["short_name"].value);
+    formData.append("proficiency", e.target["proficiency"].value);
     if (skillForm.local[index].logo !== skillForm.saved[index].logo) {
-      const formData = new FormData();
-      formData.append("long_name", e.target["long_name"].value);
-      formData.append("short_name", e.target["short_name"].value);
-      formData.append("proficiency", e.target["proficiency"].value);
       formData.append("logo", e.target["logo"].files[0]);
-      axiosWithAuthMulti
-        .put(`/api/portfolio/skills/${skill.id}`, formData)
-        .then((r) => {
-          axiosResponseHandler(r);
-        });
-    } else {
-      delete submission.localLogo;
-      delete submission.logo;
-      axiosWithAuth
-        .put(`/api/portfolio/skills/${skill.id}`, submission)
-        .then((r) => {
-          axiosResponseHandler(r);
-        });
     }
+    axiosWithAuth({
+      method,
+      headers: {
+        "Content-Type": contentTypeHeader,
+      },
+      url,
+      data: formData,
+    }).then((r) => {
+      axiosResponseHandler(r);
+    });
   };
   return (
     <form
@@ -167,7 +172,7 @@ export default function SkillForm(props) {
           className="apply"
           disabled={skillForm.buttons[index].apply}
         >
-          apply
+          {skill.id === "new" ? `add` : `apply`}
         </button>
         <button
           disabled={skillForm.buttons[index].revert}

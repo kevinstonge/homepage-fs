@@ -12,8 +12,17 @@ export default function Skills() {
       .get(`/api/portfolio/skills`)
       .then((r) => {
         const logoPath = `${process.env.REACT_APP_API}/images`;
+        const newSkill = {
+          id: "new",
+          long_name: "",
+          short_name: "",
+          logo: null,
+          localLogo: `${logoPath}/defaultLogo.png`,
+          proficiency: 1,
+        };
         setSkillForm({
           saved: [
+            { ...newSkill },
             ...r.data.skills.map((skill) => {
               return {
                 ...skill,
@@ -25,6 +34,7 @@ export default function Skills() {
             }),
           ],
           local: [
+            { ...newSkill },
             ...r.data.skills.map((skill) => {
               return {
                 ...skill,
@@ -36,6 +46,7 @@ export default function Skills() {
             }),
           ],
           buttons: [
+            { apply: true, revert: true },
             ...r.data.skills.map((skill) => {
               return { apply: true, revert: true };
             }),
@@ -44,22 +55,9 @@ export default function Skills() {
       })
       .catch((e) => console.log(e));
   }, []);
-  const newSkillProps = {
-    skill: {
-      id: 99,
-      long_name: "",
-      short_name: "",
-      logo: null,
-      proficiency: 1,
-    },
-    index: null,
-    skillForm,
-    setSkillForm,
-  };
   return (
     <>
       <h2>skills</h2>
-      {/* <SkillForm {...newSkillProps} /> */}
       {skillForm.local.length > 0 &&
         skillForm.local.map((skill, index) => {
           return SkillForm({ skill, index, skillForm, setSkillForm });
