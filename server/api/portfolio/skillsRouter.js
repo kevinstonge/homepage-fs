@@ -23,7 +23,7 @@ router.post("/", [auth, upload.single("logo")], async (req, res) => {
         long_name: req.body.long_name,
         short_name: req.body.short_name || "",
         proficiency: req.body.proficiency || 0,
-        logo: req.file?.filename || "",
+        logo: req.file?.filename || null,
       };
       const addedSkill = await Skills.addSkill(newSkill);
       if (addedSkill) {
