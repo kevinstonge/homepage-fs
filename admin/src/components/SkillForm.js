@@ -2,7 +2,6 @@ import { axiosWithAuth } from "../api/axios.js";
 import { emptySkill } from "../accessories/emptySkill.js";
 export default function SkillForm(props) {
     const { skill, index, skillForm, setSkillForm } = props;
-    console.log(skillForm.buttons);
     const changeHandler = (e) => {
         const newSkillForm = { ...skillForm };
         newSkillForm.local[index][e.target.name] = e.target.value;
