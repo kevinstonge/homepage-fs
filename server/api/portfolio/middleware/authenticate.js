@@ -1,5 +1,11 @@
 const jwt = require("jsonwebtoken");
 module.exports = (req, res, next) => {
+  //this block is for development across multiple machines
+  if (process.env.NODE_ENV === "testing") {
+    if (next !== undefined) { next() }
+    return true
+  }
+  //end dev block
   let token = "invalid";
   if (req.cookies?.auth) {
     token = req.cookies.auth;

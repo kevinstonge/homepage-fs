@@ -1,4 +1,4 @@
-import { axiosWithAuth } from "../api/axios.js";
+import { axiosWithAuth, axiosWithoutAuth } from "../api/axios.js";
 export default function SkillForm(props) {
   const { skill, index, skillForm, setSkillForm } = props;
   const setButtonsStatus = (data) => {
@@ -76,6 +76,16 @@ export default function SkillForm(props) {
       axiosResponseHandler(r);
     });
   };
+  const deleteHandler = (e) => {
+      axiosWithoutAuth.delete(`/api/portfolio/skills/${skill.id}`).then(r => {
+          if (r.status === 200) {
+            console.log('deleted');
+          }
+          else {
+              console.log("server error")
+          }
+    })
+  }
   return (
     <form
       key={`skill-${skill.id}`}
@@ -183,8 +193,20 @@ export default function SkillForm(props) {
             revertHandler(e);
           }}
         >
-          revert
+                  revert
         </button>
+        {index !== 0 &&
+            <button
+                className="delete"
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.persist();
+                    deleteHandler(e);
+                }}
+            >
+            delete
+            </button>  
+        }
       </span>
     </form>
   );
