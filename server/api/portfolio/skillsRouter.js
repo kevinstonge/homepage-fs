@@ -15,7 +15,6 @@ router.get("/", async (req, res) => {
   }
 });
 router.post("/", [auth, upload.single("logo")], async (req, res) => {
-  console.log(req.body.long_name);
   //long_name (required), short_name, logo, proficiency
   try {
     if (req.body.long_name && req.body.long_name.length > 0) {
@@ -25,9 +24,9 @@ router.post("/", [auth, upload.single("logo")], async (req, res) => {
         proficiency: req.body.proficiency || 0,
         logo: req.file?.filename || null,
       };
-      const addedSkill = await Skills.addSkill(newSkill);
-      if (addedSkill) {
-        res.status(201).json({ addedSkill });
+      const addedSkillId = await Skills.addSkill(newSkill);
+      if (addedSkillId) {
+        res.status(201).json({ addedSkillId: addedSkillId[0] });
       }
     } else {
       res

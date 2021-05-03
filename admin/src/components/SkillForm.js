@@ -1,61 +1,63 @@
-import { axiosWithAuth, axiosWithoutAuth } from "../api/axios.js";
+import { axiosWithAuth } from "../api/axios.js";
+import { emptySkill } from "../accessories/emptySkill.js";
 export default function SkillForm(props) {
-  const { skill, index, skillForm, setSkillForm } = props;
-  const setButtonsStatus = (data) => {
-    const local = data.local[index];
-    const saved = data.saved[index];
-    const identical = !Object.entries(local)
-      .map((entry) => {
-        return entry[1] === saved[entry[0]];
-      })
-      .some((b) => b === false);
-    data.buttons[index].apply = identical;
-    if (data.local[index].long_name.length === 0) {
-      data.buttons[index].apply = true;
-    }
-    data.buttons[index].revert = identical;
-    return data;
-  };
-  const changeHandler = (e) => {
-    const newSkillForm = { ...skillForm };
-    newSkillForm.local[index][e.target.name] = e.target.value;
-    if (parseInt(e.target.value)) {
-      newSkillForm.local[index][e.target.name] = parseInt(e.target.value);
-    }
-    if (e.target.name === "logo") {
-      newSkillForm.local[index].localLogo = URL.createObjectURL(
-        e.target.files[0]
-      );
-    }
-    setSkillForm({ ...setButtonsStatus(newSkillForm) });
-  };
-  const revertHandler = (e) => {
-    const newSkillForm = { ...skillForm };
-    newSkillForm.local[index] = { ...skillForm.saved[index] };
-    setSkillForm({ ...setButtonsStatus(newSkillForm) });
-  };
-  const axiosResponseHandler = (r) => {
-    if (r.status === 200 || r.status === 201) {
-      const newSkillForm = skillForm;
-      newSkillForm.saved = [
-        ...newSkillForm.local.map((skill) => {
-          return { ...skill };
-        }),
-      ];
-      setSkillForm({ ...setButtonsStatus(newSkillForm) });
-    } else {
-      console.log("error: unexpected response from server");
-    }
-  };
-  const submitHandler = (e) => {
+    const { skill, index, skillForm, setSkillForm } = props;
+    console.log(skillForm.buttons);
+    const changeHandler = (e) => {
+        const newSkillForm = { ...skillForm };
+        newSkillForm.local[index][e.target.name] = e.target.value;
+        if (parseInt(e.target.value)) {
+            newSkillForm.local[index][e.target.name] = parseInt(e.target.value);
+        }
+        if (e.target.name === "logo") {
+            newSkillForm.local[index].localLogo = URL.createObjectURL(
+            e.target.files[0]
+            );
+        }
+        setSkillForm(newSkillForm);
+    };
+    const revertHandler = (e) => {
+        const newSkillForm = { ...skillForm };
+        newSkillForm.local[index] = { ...skillForm.saved[index] };
+        setSkillForm(newSkillForm);
+    };
+    const axiosResponseHandler = (r,method) => {
+        if (r.status === 200 || r.status === 201) {
+            const newSkillForm = skillForm;
+            if (r.data?.addedSkillId) {
+                newSkillForm.local[0] = emptySkill;
+                newSkillForm.local.push({...skill, id:r.data.addedSkillId});
+                newSkillForm.saved.push({...skill, id:r.data.addedSkillId});
+                newSkillForm.buttons.push({apply:true,revert:true});
+            }
+            else if (method === "delete") {
+                console.log(JSON.stringify(newSkillForm));
+                newSkillForm.local.splice(index,1);
+                newSkillForm.buttons.splice(index,1);
+                newSkillForm.saved.splice(index,1);
+                console.log(JSON.stringify(newSkillForm));
+            }
+            else {
+                newSkillForm.saved = [
+                    ...newSkillForm.local.map((skill) => {
+                        return { ...skill };
+                    }),
+                ];            
+            }
+            setSkillForm(newSkillForm);
+        } else {
+            console.log("error: unexpected response from server");
+        }
+    };
+    const submitHandler = (e) => {
     const logoChanged =
-      skillForm.local[index].logo === skillForm.saved[index].logo;
+        skillForm.local[index].logo === skillForm.saved[index].logo;
     const contentTypeHeader = logoChanged
-      ? "multipart/form"
-      : "application/x-www-form-urlencoded";
+        ? "multipart/form"
+        : "application/x-www-form-urlencoded";
     const method = index === 0 ? "post" : "put";
     const url =
-      index === 0
+        index === 0
         ? `api/portfolio/skills/`
         : `api/portfolio/skills/${skill.id}`;
     const formData = new FormData();
@@ -63,29 +65,29 @@ export default function SkillForm(props) {
     formData.append("short_name", e.target["short_name"].value);
     formData.append("proficiency", e.target["proficiency"].value);
     if (skillForm.local[index].logo !== skillForm.saved[index].logo) {
-      formData.append("logo", e.target["logo"].files[0]);
+        formData.append("logo", e.target["logo"].files[0]);
     }
     axiosWithAuth({
-      method,
-      headers: {
+        method,
+        headers: {
         "Content-Type": contentTypeHeader,
-      },
-      url,
-      data: formData,
+        },
+        url,
+        data: formData,
     }).then((r) => {
-      axiosResponseHandler(r);
+        axiosResponseHandler(r,method);
     });
-  };
-  const deleteHandler = (e) => {
-      axiosWithoutAuth.delete(`/api/portfolio/skills/${skill.id}`).then(r => {
-          if (r.status === 200) {
-            console.log('deleted');
-          }
-          else {
-              console.log("server error")
-          }
-    })
-  }
+    };
+    const deleteHandler = (e) => {
+        axiosWithAuth.delete(`/api/portfolio/skills/${skill.id}`, { data: 'asdf' }).then(r => {
+            if (r.status === 200) {
+                axiosResponseHandler(r,"delete");
+            }
+            else {
+                console.log("server error")
+            }
+        }).catch(e => console.log(e));
+    };
   return (
     <form
       key={`skill-${skill.id}`}
@@ -110,7 +112,8 @@ export default function SkillForm(props) {
               : "changed"
           }
           onChange={(e) => {
-            e.persist();
+              e.persist();
+              e.preventDefault();
             changeHandler(e);
           }}
         />
@@ -130,6 +133,7 @@ export default function SkillForm(props) {
           }
           onChange={(e) => {
             e.persist();
+            e.preventDefault();
             changeHandler(e);
           }}
         />
@@ -188,7 +192,7 @@ export default function SkillForm(props) {
           disabled={skillForm.buttons[index].revert}
           className="revert"
           onClick={(e) => {
-            e.preventDefault();
+              e.preventDefault();
             e.persist();
             revertHandler(e);
           }}
