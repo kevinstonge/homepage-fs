@@ -6,7 +6,6 @@ export default function Skills() {
   const [skillForm, setSkillForm] = useState({
     saved: [],
     local: [],
-    buttons: [],
   });
   useEffect(() => {
     axiosWithoutAuth
@@ -39,32 +38,10 @@ export default function Skills() {
               };
             }),
           ],
-          buttons: [
-            { apply: true, revert: true },
-            ...r.data.skills.map((skill) => {
-              return { apply: true, revert: true };
-            }),
-          ],
         });
       })
       .catch((e) => console.log(e));
   }, []);
-  useEffect(()=>{ //set button status when newSkillForm changes
-      const newSkillForm = skillForm;
-      skillForm.saved.forEach((saved,index)=>{
-        const identical = !Object.entries(saved)
-            .map((entry) => {
-              return entry[1] === newSkillForm.local[index][entry[0]];
-            })
-            .some((b) => b === false);
-        newSkillForm.buttons[index].apply = identical;
-        if (newSkillForm.local[index].long_name.length === 0) {
-            newSkillForm.buttons[index].apply = true;
-        }
-        newSkillForm.buttons[index].revert = identical;
-      });
-      setSkillForm(newSkillForm);
-  },[skillForm]);
   return (
     <>
       <h2>skills</h2>

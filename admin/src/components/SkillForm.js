@@ -1,7 +1,14 @@
 import { axiosWithAuth } from "../api/axios.js";
 import { emptySkill } from "../accessories/emptySkill.js";
 export default function SkillForm(props) {
-    const { skill, index, skillForm, setSkillForm } = props;
+  const { skill, index, skillForm, setSkillForm } = props;
+  const identical = !Object.entries(skillForm.local[index]).map(entry => {
+    return entry[1] === skillForm.saved[index][entry[0]];
+  }).some((b => b === false));
+  const buttons = {
+    apply: (skillForm.local[index].long_name.length === 0) ? true : identical,
+    revert: identical
+  }
     const changeHandler = (e) => {
         const newSkillForm = { ...skillForm };
         newSkillForm.local[index][e.target.name] = e.target.value;
@@ -13,7 +20,7 @@ export default function SkillForm(props) {
             e.target.files[0]
             );
         }
-        setSkillForm(newSkillForm);
+      setSkillForm(newSkillForm);
     };
     const revertHandler = (e) => {
         const newSkillForm = { ...skillForm };
@@ -22,19 +29,15 @@ export default function SkillForm(props) {
     };
     const axiosResponseHandler = (r,method) => {
         if (r.status === 200 || r.status === 201) {
-            const newSkillForm = skillForm;
+            const newSkillForm = {...skillForm};
             if (r.data?.addedSkillId) {
                 newSkillForm.local[0] = emptySkill;
                 newSkillForm.local.push({...skill, id:r.data.addedSkillId});
-                newSkillForm.saved.push({...skill, id:r.data.addedSkillId});
-                newSkillForm.buttons.push({apply:true,revert:true});
+              newSkillForm.saved.push({ ...skill, id: r.data.addedSkillId });
             }
             else if (method === "delete") {
-                console.log(JSON.stringify(newSkillForm));
                 newSkillForm.local.splice(index,1);
-                newSkillForm.buttons.splice(index,1);
                 newSkillForm.saved.splice(index,1);
-                console.log(JSON.stringify(newSkillForm));
             }
             else {
                 newSkillForm.saved = [
@@ -49,33 +52,33 @@ export default function SkillForm(props) {
         }
     };
     const submitHandler = (e) => {
-    const logoChanged =
-        skillForm.local[index].logo === skillForm.saved[index].logo;
-    const contentTypeHeader = logoChanged
-        ? "multipart/form"
-        : "application/x-www-form-urlencoded";
-    const method = index === 0 ? "post" : "put";
-    const url =
-        index === 0
-        ? `api/portfolio/skills/`
-        : `api/portfolio/skills/${skill.id}`;
-    const formData = new FormData();
-    formData.append("long_name", e.target["long_name"].value);
-    formData.append("short_name", e.target["short_name"].value);
-    formData.append("proficiency", e.target["proficiency"].value);
-    if (skillForm.local[index].logo !== skillForm.saved[index].logo) {
-        formData.append("logo", e.target["logo"].files[0]);
-    }
-    axiosWithAuth({
-        method,
-        headers: {
-        "Content-Type": contentTypeHeader,
-        },
-        url,
-        data: formData,
-    }).then((r) => {
-        axiosResponseHandler(r,method);
-    });
+      const logoChanged =
+          skillForm.local[index].logo === skillForm.saved[index].logo;
+      const contentTypeHeader = logoChanged
+          ? "multipart/form"
+          : "application/x-www-form-urlencoded";
+      const method = index === 0 ? "post" : "put";
+      const url =
+          index === 0
+          ? `api/portfolio/skills/`
+          : `api/portfolio/skills/${skill.id}`;
+      const formData = new FormData();
+      formData.append("long_name", e.target["long_name"].value);
+      formData.append("short_name", e.target["short_name"].value);
+      formData.append("proficiency", e.target["proficiency"].value);
+      if (skillForm.local[index].logo !== skillForm.saved[index].logo) {
+          formData.append("logo", e.target["logo"].files[0]);
+      }
+      axiosWithAuth({
+          method,
+          headers: {
+          "Content-Type": contentTypeHeader,
+          },
+          url,
+          data: formData,
+      }).then((r) => {
+          axiosResponseHandler(r,method);
+      });
     };
     const deleteHandler = (e) => {
         axiosWithAuth.delete(`/api/portfolio/skills/${skill.id}`, { data: 'asdf' }).then(r => {
@@ -183,12 +186,12 @@ export default function SkillForm(props) {
         <button
           type="submit"
           className="apply"
-          disabled={skillForm.buttons[index].apply}
+          disabled={buttons.apply}
         >
           {skill.id === "new" ? `add` : `apply`}
         </button>
         <button
-          disabled={skillForm.buttons[index].revert}
+          disabled={buttons.revert}
           className="revert"
           onClick={(e) => {
               e.preventDefault();
