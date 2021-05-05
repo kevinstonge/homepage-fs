@@ -12,6 +12,7 @@ module.exports = (req, res, next) => {
   } else if (req.headers?.authorization) {
     token = req.headers.authorization.split(" ")[1];
   }
+  console.log(token);
   if (token !== "invalid" && jwt.verify(token, process.env.JWT_SECRET)) {
     if (next !== undefined) {
       next();
