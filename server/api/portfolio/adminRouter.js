@@ -12,22 +12,24 @@ router.get("*", (req, res) => {
     if (req.path === "/") {
       //for root path, just send index.html
       res.sendFile(path.join(__dirname, "../../../admin/build/", "index.html"));
-    } else {
-      //if another path is specified, send the requested path/file (I think this hands off to React routes, not sure yet!)
-      res.sendFile(
-        path.join(__dirname, "../../../admin/build/", decodeURI(req.path))
-      );
     }
+    // else {
+    //   //if another path is specified, send the requested path/file (I think this hands off to React routes, not sure yet!)
+    //   res.sendFile(
+    //     path.join(__dirname, "../../../admin/build/", decodeURI(req.path))
+    //   );
+    // }
   } else {
     router.use(stat("../../../adminLogin/"));
     //if not authenticated, send to adminLogin/ (same logic as above)
     if (req.path === "/") {
       res.sendFile(path.join(__dirname, "../../../adminLogin/", "index.html"));
-    } else {
-      res.sendFile(
-        path.join(__dirname, "../../../adminLogin/", decodeURI(req.path))
-      );
     }
+    // else {
+    //   res.sendFile(
+    //     path.join(__dirname, "../../../adminLogin/", decodeURI(req.path))
+    //   );
+    // }
   }
 });
 
