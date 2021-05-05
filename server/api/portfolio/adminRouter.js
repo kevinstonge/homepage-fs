@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken");
 router.get("*", (req, res) => {
   if (authenticate(req)) {
     router.use(stat("../../../admin/"));
+    console.log(req.path);
     if (req.path === "/") {
-      console.log('12');
       res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
     } else {
       console.log('15');
