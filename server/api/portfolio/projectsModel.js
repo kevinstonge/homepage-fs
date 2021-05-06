@@ -30,7 +30,7 @@ const addProject = async (projectObject, skills) => {
 
 const listProjects = async () => {
   try {
-    const projects = await db('projects').join("projects-skills", 'projects-skills.project_id', "=", 'projects.id');
+    const projects = await db('projects').leftJoin("projects-skills", 'projects-skills.project_id', "=", 'projects.id');
     const reducedProjects = projects.reduce((memo, project) => {
       const p = `project${project.id}`;
       if (!memo[p]) {

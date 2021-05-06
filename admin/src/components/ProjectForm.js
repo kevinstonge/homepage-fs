@@ -50,7 +50,7 @@ export default function ProjectForm(props) {
         }
     }
     const submitHandler = (e) => {
-        const imageChanged = projectForm.local[index].image === projectForm.saved[index].logo;
+        const imageChanged = projectForm.local[index].image === projectForm.saved[index].image;
         const contentTypeHeader = imageChanged
             ? "multipart/form"
             : "application/x-www-form-urlencoded";

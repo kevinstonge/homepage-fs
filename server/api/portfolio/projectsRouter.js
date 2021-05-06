@@ -21,10 +21,8 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
   //title (required), url (required), description, image, github, rank (auto-assign on creation, allow change through ranking interface)
   try {
     if (
-      req.body.title &&
-      req.body.title.length > 0 &&
-      req.body.url &&
-      validUrl(req.body.url)
+      req.body?.title?.length > 0 &&
+      validUrl(req.body?.url)
     ) {
       const newProject = {
         title: req.body.title,
