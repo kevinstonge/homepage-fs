@@ -141,7 +141,7 @@ export default function SkillForm(props) {
         />
       </label>
 
-      <label htmlFor={`skill-${skill.id}-logo`}>
+      <label htmlFor={`skill-${skill.id}-logo`} style={{flex:0}}>
         <p>logo:</p>
         <img
           src={skillForm.local[index].localLogo}
