@@ -37,7 +37,8 @@ body {
         justify-content: stretch;
         gap: 0.2rem;
         input,
-        select {
+        select,
+        textarea {
           background-color: $b4;
           color: $f2;
           width: 100%;
@@ -64,6 +65,13 @@ body {
   }
   img.logo {
     width: 2rem;
+    border: 1px solid $b2;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  img.project-image {
+    width: 10rem;
     border: 1px solid $b2;
     &:hover {
       cursor: pointer;

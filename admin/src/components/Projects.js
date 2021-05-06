@@ -32,7 +32,7 @@ export default function Projects() {
               return {
                 ...project,
                 localImage:
-                  project.image === null
+                  project.image === null || project.image === ""
                     ? `${imagePath}/defaultImage.png`
                     : `${imagePath}/${project.image}`,
               };
@@ -42,6 +42,7 @@ export default function Projects() {
       })
       .catch((e) => console.log(e));
   }, []);
+  console.log(projectForm);
   return (
     <>
       <h2>Projects</h2>

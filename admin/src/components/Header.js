@@ -1,10 +1,22 @@
-import { NavLink } from 'react-router-dom';
 import '../styles/Header.scss';
-export default function Header() {
+export default function Header(props) {
+    const {page, setPage} = props
     return (<header>
         <nav>
-            <NavLink to="/skills">skills</NavLink>
-            <NavLink to="/projects">projects</NavLink>
+            <button 
+                className={page==="projects" ? `nav, active` : `nav, inactive`}
+                onClick={()=>setPage('projects')}
+                disabled={page==="projects"}
+            >
+                projects
+            </button>
+            <button
+                className={page==="skills" ? `nav, active` : `nav, inactive`}
+                onClick={()=>setPage('skills')}
+                disabled={page==="skills"}
+            >
+                skills
+            </button>
         </nav>
         <nav>
             <button>log out</button>

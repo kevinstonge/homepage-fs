@@ -1,23 +1,18 @@
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { useState } from 'react';
 import "../styles/App.scss";
 import Header from "./Header.js";
 import Projects from "./Projects.js";
 import Skills from "./Skills.js";
 
 function App() {
+  const [page, setPage] = useState("projects");
   return (
     <div id="mainContainer">
-      <Router>
-        <Header />
+        <Header {...{page, setPage}}/>
         <div id="contentContainer">
-          <Route path="/skills">
-            <Skills />
-          </Route>
-          <Route path="/projects">
-            <Projects />
-          </Route>
+          {page === "projects" && <Projects />}
+          {page === "skills" && <Skills />}
         </div>
-      </Router>
     </div>
   );
 }
