@@ -30,6 +30,7 @@ body {
     }
     #contentContainer {
       @include flexC();
+      gap: 0.5rem;
       padding: 0.1rem;
       background-color: $b3;
       border-left: 1px solid $b4;

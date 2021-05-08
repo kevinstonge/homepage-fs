@@ -1,0 +1,31 @@
+@import "./base.scss";
+table {
+  > caption {
+    font-weight: bolder;
+    color: desaturate($e1, 20%);
+    text-align: left;
+    &:hover {
+      color: $e1;
+    }
+  }
+  > thead {
+    text-align: left;
+  }
+  tbody > tr:nth-of-type(odd) {
+    background-color: $b2;
+  }
+  tr > td {
+    > * {
+      display: inline;
+      vertical-align: middle;
+      text-align: left;
+    }
+    > img {
+      margin-right: 0.5rem;
+    }
+  }
+  td,
+  th {
+    padding: 0.5rem;
+  }
+}
