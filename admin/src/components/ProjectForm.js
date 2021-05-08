@@ -1,7 +1,7 @@
 import { axiosWithAuth } from "../api/axios.js";
 import { emptyProject } from "../accessories/emptyProject.js";
 export default function ProjectForm(props) {
-    const { project, projectForm, setProjectForm, index } = props;
+    const { project, projectForm, setProjectForm, index, skills } = props;
     const identical = !Object.entries(projectForm.local[index])
         .map(entry => {
             return entry[1] === projectForm.saved[index][entry[0]];
@@ -16,6 +16,19 @@ export default function ProjectForm(props) {
         if (e.target.name==="image") {
             newProjectForm.local[index].localImage = URL.createObjectURL(e.target.files[0]);
         }
+        setProjectForm(newProjectForm);
+    }
+    const updateSkills = (e) => {
+        const v = parseInt(e.target.value);
+        const newProjectForm = { ...projectForm };
+        const localSkills = [...newProjectForm.local[index].skills];
+        if (localSkills.indexOf(v) === -1) {
+            localSkills.push(v);
+        }
+        else {
+            localSkills.splice(localSkills.indexOf(v),1);
+        }
+        newProjectForm.local[index].skills = localSkills;
         setProjectForm(newProjectForm);
     }
     const revertHandler = (e) => {
@@ -64,6 +77,7 @@ export default function ProjectForm(props) {
         formData.append("description", e.target["description"].value);
         formData.append("url", e.target["url"].value);
         formData.append("github", e.target["github"].value);
+        formData.append("skills", JSON.stringify(projectForm.local[index].skills));
         if (imageChanged) {
             formData.append("image", e.target["image"].files[0]);
         }
@@ -210,6 +224,32 @@ export default function ProjectForm(props) {
                 </button>
                 }
             </div>
+            {skills.length > 0 && 
+            <fieldset 
+                id="form-footer"
+            >
+                <p>Skills:</p>
+                {skills.map(skill=>{
+                    const sId=`p${project.id}-s${skill.id}`;
+                    return(
+                        <label htmlFor={sId} key={sId} className="checkbox-label">
+                            <input 
+                                type="checkbox"
+                                name="skills"
+                                id={sId}
+                                value={skill.id}
+                                checked={projectForm.local[index].skills.includes(skill.id)}
+                                onChange={(e)=>{
+                                    e.persist();
+                                    updateSkills(e);
+                                }}
+                            />
+                            <p>{skill.short_name}</p>
+                        </label>
+                    )
+                })}               
+            </fieldset>
+            }
         </form>
     )
 }

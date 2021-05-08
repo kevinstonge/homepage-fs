@@ -7,6 +7,7 @@ export default function Projects() {
     saved: [],
     local: [],
   });
+  const [skills, setSkills] = useState([]);
   useEffect(() => {
     axiosWithoutAuth
       .get(`/api/portfolio/projects`)
@@ -39,6 +40,7 @@ export default function Projects() {
             }),
           ],
         });
+        setSkills(r.data.skills);
       })
       .catch((e) => console.log(e));
   }, []);
@@ -47,7 +49,7 @@ export default function Projects() {
       <h2>Projects</h2>
       {projectForm.local.length > 0 &&
         projectForm.local.map((project, index) => {
-          return ProjectForm({ project, index, projectForm, setProjectForm });
+          return ProjectForm({ project, index, projectForm, setProjectForm, skills });
         })}
       <p style={{ fontSize: "smaller" }}>*required</p>
     </>

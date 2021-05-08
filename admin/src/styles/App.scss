@@ -25,10 +25,12 @@ body {
     background-color: $b2;
     padding: 0.5rem;
     @include flexC();
-    form {
+    form.skillForm,
+    form.projectForm {
       @include flexR();
       justify-content: stretch;
       align-items: stretch;
+      flex-wrap: wrap;
       @include phone {
         @include flexC();
       }
@@ -119,6 +121,22 @@ body {
     justify-items: stretch;
     textarea {
       flex: 1;
+    }
+  }
+  fieldset#form-footer {
+    @include flexR();
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    > label.checkbox-label {
+      flex: unset;
+      @include flexR();
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      width: unset;
+      > input {
+        width: unset;
+      }
     }
   }
 }
