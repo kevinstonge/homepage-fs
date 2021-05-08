@@ -6,13 +6,14 @@ const login = require("./adminModel.js");
 const jwt = require("jsonwebtoken");
 
 router.get("*", (req, res) => {
-  if (authenticate(req)) {
+  if (req.path === "/manifest.json") {
+	res.sendFile(path.join(__dirname, "../../../client/build","manifest.json"));
+  }
+  else if (authenticate(req)) {
     router.use(stat("../../../admin/"));
-    console.log(req.path);
     if (req.path === "/") {
       res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
     } else {
-      console.log('15');
         res.sendFile(
         path.join(__dirname, "../../../admin/build", decodeURI(req.path))
       );
