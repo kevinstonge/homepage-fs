@@ -48,7 +48,7 @@ export default function Projects() {
     <>
       <h2>Projects</h2>
       {projectForm.local.length > 0 &&
-        projectForm.local.map((project, index) => {
+        projectForm.local.sort((a,b)=>a.rank-b.rank).map((project, index) => {
           return ProjectForm({ project, index, projectForm, setProjectForm, skills });
         })}
       <p style={{ fontSize: "smaller" }}>*required</p>

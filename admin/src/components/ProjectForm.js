@@ -31,6 +31,32 @@ export default function ProjectForm(props) {
         newProjectForm.local[index].skills = localSkills;
         setProjectForm(newProjectForm);
     }
+    const promoteProject = (e) => {
+        const data = new FormData();
+        const oldRank = project.rank;
+        const newRank = oldRank - 1;
+        data.append("rank", newRank);
+        axiosWithAuth({
+            method: "put",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            url: `/api/portfolio/projects/${project.id}`,
+            data,
+        }).then((r)=>{
+            const newProjectForm = {...projectForm}
+            newProjectForm.local[index].rank=newRank;
+            newProjectForm.local.forEach((prj,idx)=>{
+                if (prj.id && prj.id !== project.id && prj.id !== "new") {
+                    if (prj.rank >= newRank && prj.rank < oldRank) {
+                        newProjectForm.local[idx].rank += 1;
+                    }
+                }
+            })
+            setProjectForm(newProjectForm);
+            axiosResponseHandler(r,"put");
+        });
+    }
     const revertHandler = (e) => {
         const newProjectForm = {...projectForm};
         newProjectForm.local[index] = { ...projectForm.saved[index] };
@@ -187,10 +213,21 @@ export default function ProjectForm(props) {
                     }}
                 />
             </label>
+            {project.id !== "new" && 
             <label htmlFor={`project-${project.id}-rank`}>
                 <p>rank ({project.rank}):</p>
-                <button>promote</button>
+                <button 
+                    id={`project=${project.id}-rank`}
+                    disabled={project.rank===1}
+                    onClick={(e)=>{
+                        e.persist();
+                        promoteProject(e);
+                    }}
+                >
+                    promote
+                </button>
             </label>
+            }   
             </div>
             <div className="form-buttons">
                 <button

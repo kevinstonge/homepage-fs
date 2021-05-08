@@ -53,3 +53,29 @@ $changed: #f95;
   }
   font-family: unset;
 }
+
+@mixin formButton {
+  cursor: pointer;
+  background-color: $b4;
+  color: $f1;
+  border: 1px solid $e1;
+  &.apply {
+    color: $e1;
+    border: 1px solid $e1;
+  }
+  &.revert {
+    color: $changed;
+    border: 1px solid $changed;
+  }
+  &.delete {
+    border: 1px solid $e3;
+  }
+  &:focus {
+    outline: 1px solid $f1;
+  }
+  &:disabled {
+    color: darken($f1, 40%);
+    border: 1px solid $b2;
+    cursor: default;
+  }
+}
