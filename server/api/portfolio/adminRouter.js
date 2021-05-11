@@ -10,7 +10,7 @@ router.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "../../../client/build","manifest.json"));
   }
   else if (authenticate(req)) {
-    router.use(stat("../../../admin"));
+    router.use(stat("../../../admin/build"));
     if (req.path === "/") {
       res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
     } else {
