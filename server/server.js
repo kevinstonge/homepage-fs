@@ -17,6 +17,7 @@ server.use(
         "www.kevinstonge.com",
         "kevinstonge.com",
       ],
+      imgSrc: ["*"],
       upgradeInsecureRequests: [],
     },
   })
