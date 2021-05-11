@@ -17,7 +17,7 @@ const upload = multer({
       cb(null, true);
     }
   },
-  limits: { fileSize: 512000 }, //TODO: figure out how to send appropriate error message if file size is exceeded.
+  limits: { fileSize: 5120000 }, //TODO: figure out how to send appropriate error message if file size is exceeded.
 });
 
 module.exports = upload;

@@ -12,6 +12,11 @@ server.use(
         "www.kevinstonge.com",
         "kevinstonge.com",
       ],
+      objectSrc: [
+        "'self'",
+        "www.kevinstonge.com",
+        "kevinstonge.com",
+      ],
       upgradeInsecureRequests: [],
     },
   })

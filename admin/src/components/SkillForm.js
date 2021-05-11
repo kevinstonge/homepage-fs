@@ -16,30 +16,24 @@ export default function SkillForm(props) {
             newSkillForm.local[index][e.target.name] = parseInt(e.target.value);
         }
         if (e.target.name === "logo") {
-            newSkillForm.local[index].localLogo = URL.createObjectURL(
-            e.target.files[0]
-            );
+          const reader = new FileReader();
+          reader.onload = ()=>{
+            const data = reader.result.replace('base64,','charset=utf-8;base64,');
+            newSkillForm.local[index].localLogo = data;
+            setSkillForm(newSkillForm);
+          };
+          reader.readAsDataURL(e.target.files[0]);
         }
-      setSkillForm(newSkillForm);
+        // URL.createObjectURL - working locally, not working with cors in production
+        // if (e.target.name === "logo") {
+        //     newSkillForm.local[index].localLogo = URL.createObjectURL(
+        //     e.target.files[0]
+        //     );
+        // }
+      if (e.target.name !== "logo") {
+        setSkillForm(newSkillForm);
+      }
     };
-
-/*
-URL.createObjectURL is causing csp problems - alternative approach:
-
-<input type="file" accept="image/*" onchange="loadFile(event)">
-<img id="output"/>
-<script>
-  var loadFile = function(event) {
-    var reader = new FileReader();
-    reader.onload = function(){
-      var output = document.getElementById('output');
-      output.src = reader.result;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  };
-</script>
-*/
-
     const revertHandler = (e) => {
         const newSkillForm = { ...skillForm };
         newSkillForm.local[index] = { ...skillForm.saved[index] };
@@ -163,6 +157,7 @@ URL.createObjectURL is causing csp problems - alternative approach:
         <p>logo:</p>
         <img
           src={skillForm.local[index].localLogo}
+          id = {`skill${skill.id}-img`}
           alt={`${skillForm.local[index].long_name}-logo`}
           className="logo"
         />
