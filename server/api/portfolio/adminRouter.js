@@ -10,7 +10,7 @@ router.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "../../../client/build","manifest.json"));
   }
   else if (authenticate(req)) {
-    router.use(stat("../../../admin/"));
+    router.use(stat("../../../admin"));
     if (req.path === "/") {
       res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
     } else {
@@ -19,7 +19,7 @@ router.get("*", (req, res) => {
       );
     }
   } else {
-    router.use(stat("../../../adminLogin/"));
+    router.use(stat("../../../adminLogin"));
     if (req.path === "/") {
       res.sendFile(path.join(__dirname, "../../../adminLogin", "index.html"));
     } else {
@@ -37,7 +37,7 @@ router.post("/login", async (req, res) => {
     const authorized = await login({ username, password });
     if (authorized) {
       const token = jwt.sign({ user: req.body.user }, process.env.JWT_SECRET);
-      res.cookie("auth", token).redirect(`/admin?token=${token}`);
+      res.cookie("auth", token).redirect(`/admin`);
     } else {
       console.log("unauthorized");
       res.redirect("/admin");
