@@ -22,6 +22,24 @@ export default function SkillForm(props) {
         }
       setSkillForm(newSkillForm);
     };
+
+/*
+URL.createObjectURL is causing csp problems - alternative approach:
+
+<input type="file" accept="image/*" onchange="loadFile(event)">
+<img id="output"/>
+<script>
+  var loadFile = function(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+      var output = document.getElementById('output');
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
+</script>
+*/
+
     const revertHandler = (e) => {
         const newSkillForm = { ...skillForm };
         newSkillForm.local[index] = { ...skillForm.saved[index] };

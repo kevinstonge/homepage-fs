@@ -21,8 +21,8 @@ server.use(
     },
   })
 );
-const cors = require("cors");
-server.use(cors());
+// const cors = require("cors");
+// server.use(cors());
 const cp = require("cookie-parser");
 server.use(cp());
 const path = require("path");
