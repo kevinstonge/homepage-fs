@@ -8,11 +8,11 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|svg|SVG)$/)) {
       req.fileValidationError = "Only image files are allowed!";
       res
         .status(400)
-        .json({ message: "ERROR: image must be of type JPG, PNG, or GIF" });
+        .json({ message: "ERROR: image must be of type JPG, PNG, GIF, or SVG" });
     } else {
       cb(null, true);
     }
