@@ -16,23 +16,11 @@ export default function SkillForm(props) {
             newSkillForm.local[index][e.target.name] = parseInt(e.target.value);
         }
         if (e.target.name === "logo") {
-          const reader = new FileReader();
-          reader.onload = ()=>{
-            const data = reader.result.replace('base64,','charset=utf-8;base64,');
-            newSkillForm.local[index].localLogo = data;
-            setSkillForm(newSkillForm);
-          };
-          reader.readAsDataURL(e.target.files[0]);
+          newSkillForm.local[index].localLogo = URL.createObjectURL(
+            e.target.files[0]
+          );
         }
-        // URL.createObjectURL - working locally, not working with cors in production
-        // if (e.target.name === "logo") {
-        //     newSkillForm.local[index].localLogo = URL.createObjectURL(
-        //     e.target.files[0]
-        //     );
-        // }
-      if (e.target.name !== "logo") {
         setSkillForm(newSkillForm);
-      }
     };
     const revertHandler = (e) => {
         const newSkillForm = { ...skillForm };

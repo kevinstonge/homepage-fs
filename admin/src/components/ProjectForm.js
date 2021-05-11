@@ -14,17 +14,11 @@ export default function ProjectForm(props) {
         const newProjectForm = { ...projectForm };
         newProjectForm.local[index][e.target.name] = e.target.value;
         if (e.target.name==="image") {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const data = reader.result.replace('base64,','charset=utf-8;base64,');
-                newProjectForm.local[index].localImage = data;
-                setProjectForm(newProjectForm);
-            }
-            reader.readAsDataURL(e.target.files[0]);
+            newProjectForm.local[index].localImage = URL.createObjectURL(
+                e.target.files[0]
+            );
         }
-        if (e.target.name!=="image") {
-            setProjectForm(newProjectForm);
-        }
+        setProjectForm(newProjectForm);
     }
     const updateSkills = (e) => {
         const v = parseInt(e.target.value);

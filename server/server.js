@@ -12,12 +12,12 @@ server.use(
         "www.kevinstonge.com",
         "kevinstonge.com",
       ],
-      "object-src": [
+      "img-src": [
         "'self'",
+        "blob:",
         "www.kevinstonge.com",
         "kevinstonge.com",
       ],
-      "img-src": ["'self'","data:","blob:"],
       upgradeInsecureRequests: [],
     },
   })
