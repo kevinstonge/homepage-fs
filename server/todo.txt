@@ -1,3 +1,11 @@
-what happens if a new rank is assigned that is much higher than the highest possible rank, or less than 0, etc
+postgres:
 
-when project is deleted, should the ranks change to fill the hole?
+user: postgres
+db name: portfolio
+ip: 192.168.2.226:5432
+pw: Pg198......
+
+
+Configuration files: /etc/postgresql/[version]/[cluster]/
+Binaries: /usr/lib/postgresql/[version]
+Data files: /var/lib/postgresql/[version]/[cluster]

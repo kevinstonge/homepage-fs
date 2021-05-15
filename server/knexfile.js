@@ -6,7 +6,9 @@ module.exports = {
     seeds: { directory: "./data/seeds" },
     useNullAsDefault: true,
     pool: {
-      afterCreate: (conn, cb) => { conn.run('PRAGMA foreign_keys = ON', cb) }
+      afterCreate: (conn, cb) => {
+        conn.run("PRAGMA foreign_keys = ON", cb);
+      },
     },
   },
   testing: {
@@ -16,17 +18,26 @@ module.exports = {
     seeds: { directory: "./data/seeds" },
     useNullAsDefault: true,
     pool: {
-      afterCreate: (conn, cb) => { conn.run('PRAGMA foreign_keys = ON', cb) }
+      afterCreate: (conn, cb) => {
+        conn.run("PRAGMA foreign_keys = ON", cb);
+      },
     },
   },
   production: {
     client: "pg",
-    connection: `${process.env.DATABASE_URL}?ssl=true`,
+    connection: {
+      host: process.env.DATABASE_IP,
+      user: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASS,
+      database: process.env.DATABASE_DATABASE,
+    },
     ssl: { rejectUnauthorized: false },
     migrations: { directory: "./data/migrations" },
     seeds: { directory: "./data/seeds" },
     pool: {
-      afterCreate: (conn, cb) => { conn.run('PRAGMA foreign_keys = ON', cb) }
+      afterCreate: (conn, cb) => {
+        conn.run("PRAGMA foreign_keys = ON", cb);
+      },
     },
   },
 };
