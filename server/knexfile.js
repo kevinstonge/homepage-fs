@@ -26,20 +26,9 @@ module.exports = {
   },
   production: {
     client: "pg",
-    connection: {
-      host: process.env.DATABASE_IP,
-      port: process.env.DATABASE_PORT,
-      user: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASS,
-      database: process.env.DATABASE_DATABASE,
-    },
+    connection: `postgres://${process.env.DATABASE_USER}:${process.env.DATABASE_PASS}@${process.env.DATABASE_IP}:5432/portfolio`,
     ssl: { rejectUnauthorized: false },
     migrations: { directory: "./data/migrations" },
     seeds: { directory: "./data/seeds" },
-    pool: {
-      afterCreate: (conn, cb) => {
-        conn.run("PRAGMA foreign_keys = ON", cb);
-      },
-    },
   },
 };
