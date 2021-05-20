@@ -20,10 +20,7 @@ router.get("/", async (req, res) => {
 router.post("/", [auth, upload.single("image")], async (req, res) => {
   //title (required), url (required), description, image, github, rank (auto-assign on creation, allow change through ranking interface)
   try {
-    if (
-      req.body?.title?.length > 0 &&
-      validUrl(req.body?.url)
-    ) {
+    if (req.body?.title?.length > 0 && validUrl(req.body?.url)) {
       const newProject = {
         title: req.body.title,
         url: req.body.url,
@@ -31,13 +28,12 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
         image: req.file?.filename || "",
         github: req.body.github || "",
       };
-      const skills = req.body?.skills || [];
+      const skills = JSON.parse(req.body?.skills) || [];
       const addedProject = await Projects.addProject(newProject, skills);
       if (addedProject) {
         res.status(201).json({ addedProject });
-      }
-      else {
-        res.status(500).json({message: "unable to add project"})
+      } else {
+        res.status(500).json({ message: "unable to add project" });
       }
     } else {
       res.status(400).json({
@@ -56,19 +52,19 @@ router.put(
   [auth, projectExists, upload.single("image")],
   async (req, res) => {
     try {
-      if ( 
+      if (
         !req.body.title &&
         !req.body.description &&
         !req.file?.filename &&
         !req.body.github &&
         !req.body.url &&
         !req.body.rank &&
-        !req.body.skills 
+        !req.body.skills
       ) {
         res.status(400).json({
           message: "error: no valid values provided to update, no changes made",
         });
-      } else { 
+      } else {
         const revisedProject = {
           ...(req.body.title && { title: req.body.title }),
           ...(req.body.description && { description: req.body.description }),
@@ -76,14 +72,16 @@ router.put(
           ...(req.body.github && { github: req.body.github }),
           ...(req.body.url && { url: req.body.url }),
           ...(req.body.rank && { rank: req.body.rank }),
-          ...(req.body.skills && { skills: req.body.skills })
+          ...(req.body.skills && { skills: req.body.skills }),
         };
         const updatedProject = await Projects.updateProject(
           req.params.id,
           revisedProject
         );
         if (updatedProject) {
-          res.status(200).json({ message: "successfully updated project", updatedProject });
+          res
+            .status(200)
+            .json({ message: "successfully updated project", updatedProject });
         } else {
           res
             .status(500)
