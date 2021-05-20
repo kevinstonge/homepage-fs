@@ -1,4 +1,24 @@
 @import "./base.scss";
+
+.skills-table {
+  @include flexC();
+  gap: 0.5rem;
+  > .row {
+    @include flexR();
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    > .img-name {
+      @include flexR();
+      align-items: center;
+      gap: 0.3rem;
+      > img {
+        max-width: 2rem;
+      }
+    }
+  }
+}
+
 table {
   > caption {
     font-weight: bolder;
@@ -20,13 +40,11 @@ table {
       vertical-align: middle;
       text-align: left;
     }
-    > img {
-      margin-right: 0.5rem;
-      height: 2rem;
+    &.img-container {
+      border: 0.5rem inset transparent;
     }
-  }
-  td,
-  th {
-    padding: 0.5rem;
+    > img {
+      width: 2rem;
+    }
   }
 }
