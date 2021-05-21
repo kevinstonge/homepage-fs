@@ -16,6 +16,7 @@ function Skills() {
       .get(`https://www.kevinstonge.com/api/portfolio/projects`)
       .then((r) => {
         if (r.status === 200) {
+          console.log(r);
           setProjects(r.data.projects);
           setSkills(r.data.skills);
           setStatus(null);
@@ -28,53 +29,32 @@ function Skills() {
   return (
     <>
       {skills.length > 0 && (
-        <>
-          <h2>My technical skills</h2>
-          <div className="skills-table">
-            <div className="row">
-              <p>skill</p>
-              <p>proficiency</p>
-            </div>
-            {skills.map((skill) => (
-              <div className="row" key={`${skill.long_name}`}>
-                <div className="img-name">
-                  <img
-                    src={`https://www.kevinstonge.com/images/${skill.logo}`}
-                    alt={`${skill.long_name}`}
-                  />
-                  <p>{skill.long_name}</p>
-                </div>
-                <p>{proficiency[skill.proficiency]}</p>
-              </div>
-            ))}
-          </div>
-        </>
-        // <table>
-        //   <caption>Skills</caption>
-        //   <thead>
-        //     <tr>
-        //       <th colSpan="2">skill</th>
-        //       <th style={{ width: "100%" }}>proficiency</th>
-        //     </tr>
-        //   </thead>
-        //   <tbody>
-        //     {/* long_name, short_name, logo, proficiency */}
-        //     {skills.map((skill) => (
-        //       <tr key={`skill${skill.id}`}>
-        //         <td className="img-container">
-        //           <img
-        //             src={`https://www.kevinstonge.com/images/${skill.logo}`}
-        //             alt={`${skill.long_name}`}
-        //           />
-        //         </td>
-        //         <td>
-        //           <p>{skill.long_name}</p>
-        //         </td>
-        //         <td>{proficiency[skill.proficiency]}</td>
-        //       </tr>
-        //     ))}
-        //   </tbody>
-        // </table>
+        <div className="skills">
+          <table>
+            <caption>My technical skills</caption>
+            <thead>
+              <tr>
+                <th>skill</th>
+                <th>proficiency</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* long_name, short_name, logo, proficiency */}
+              {skills.map((skill) => (
+                <tr key={`skill${skill.id}`}>
+                  <td className="img-name">
+                    <img
+                      src={`https://www.kevinstonge.com/images/${skill.logo}`}
+                      alt={`${skill.long_name}`}
+                    />
+                    <p>{skill.long_name}</p>
+                  </td>
+                  <td>{proficiency[skill.proficiency]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
       {projects.length > 0 && (
         <>

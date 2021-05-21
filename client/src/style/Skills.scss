@@ -1,24 +1,4 @@
 @import "./base.scss";
-
-.skills-table {
-  @include flexC();
-  gap: 0.5rem;
-  > .row {
-    @include flexR();
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    > .img-name {
-      @include flexR();
-      align-items: center;
-      gap: 0.3rem;
-      > img {
-        max-width: 2rem;
-      }
-    }
-  }
-}
-
 table {
   > caption {
     font-weight: bolder;
@@ -35,16 +15,31 @@ table {
     background-color: $b2;
   }
   tr > td {
+    vertical-align: middle;
     > * {
       display: inline;
       vertical-align: middle;
       text-align: left;
     }
-    &.img-container {
-      border: 0.5rem inset transparent;
+    &.img-name {
+      @include flexR();
+      align-items: center;
+      gap: 0.2rem;
     }
     > img {
       width: 2rem;
+      max-height: 2rem;
     }
+  }
+  td {
+    padding: 0 0.5rem 0 0;
+    border: 0.2rem solid transparent;
+  }
+  thead,
+  tbody {
+    border-left: 0.2rem solid transparentize($f1, 0.5);
+  }
+  th:nth-of-type(1) {
+    padding-left: 0.2rem;
   }
 }
