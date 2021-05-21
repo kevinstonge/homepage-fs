@@ -1,45 +1,31 @@
 @import "./base.scss";
-table {
-  > caption {
-    font-weight: bolder;
-    color: desaturate($e1, 20%);
-    text-align: left;
-    &:hover {
-      color: $e1;
-    }
-  }
-  > thead {
-    text-align: left;
-  }
-  tbody > tr:nth-of-type(odd) {
-    background-color: $b2;
-  }
-  tr > td {
-    vertical-align: middle;
-    > * {
-      display: inline;
-      vertical-align: middle;
-      text-align: left;
-    }
-    &.img-name {
-      @include flexR();
-      align-items: center;
-      gap: 0.2rem;
+.skills {
+  @include flexR();
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 1rem;
+  > .skillCard {
+    background-color: $b4;
+    color: $f3;
+    padding: 0.25rem;
+    border-radius: 0.2rem 0;
+    box-shadow: 0.1rem 0.1rem 0 $b1;
+    @include flexR();
+    gap: 0.25rem;
+    > .name-prof {
+      @include flexC();
+      > .skill-name {
+        font-weight: bold;
+        color: lighten($e1, 20%);
+      }
+      > .proficiency {
+        font-size: 0.8rem;
+        font-style: italic;
+      }
     }
     > img {
       width: 2rem;
       max-height: 2rem;
     }
-  }
-  td {
-    padding: 0 0.5rem 0 0;
-    border: 0.2rem solid transparent;
-  }
-  thead,
-  tbody {
-    border-left: 0.2rem solid transparentize($f1, 0.5);
-  }
-  th:nth-of-type(1) {
-    padding-left: 0.2rem;
   }
 }

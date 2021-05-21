@@ -16,7 +16,6 @@ function Skills() {
       .get(`https://www.kevinstonge.com/api/portfolio/projects`)
       .then((r) => {
         if (r.status === 200) {
-          console.log(r);
           setProjects(r.data.projects);
           setSkills(r.data.skills);
           setStatus(null);
@@ -29,32 +28,25 @@ function Skills() {
   return (
     <>
       {skills.length > 0 && (
-        <div className="skills">
-          <table>
-            <caption>My technical skills</caption>
-            <thead>
-              <tr>
-                <th>skill</th>
-                <th>proficiency</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* long_name, short_name, logo, proficiency */}
-              {skills.map((skill) => (
-                <tr key={`skill${skill.id}`}>
-                  <td className="img-name">
-                    <img
-                      src={`https://www.kevinstonge.com/images/${skill.logo}`}
-                      alt={`${skill.long_name}`}
-                    />
-                    <p>{skill.long_name}</p>
-                  </td>
-                  <td>{proficiency[skill.proficiency]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <h2>My technical skills</h2>
+          <div className="skills">
+            {skills.map((skill) => (
+              <div className="skillCard" key={`$skill_${skill.id}`}>
+                <img
+                  src={`https://www.kevinstonge.com/images/${skill.logo}`}
+                  alt={`${skill.long_name}`}
+                />
+                <div className="name-prof">
+                  <p className="skill-name">{skill.long_name}</p>
+                  <p className="proficiency">
+                    [{proficiency[skill.proficiency]}]
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
       {projects.length > 0 && (
         <>
