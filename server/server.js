@@ -14,12 +14,15 @@ server.use(
   })
 );
 const cors = require("cors");
-server.use(
-  cors({
-    credentials: true,
-    origin: ["https://www.kevinstonge.com", "https://kevinstonge.com"],
-  })
-);
+const corsConfig =
+  process.env.NODE_ENV === "development"
+    ? { origin: "*" }
+    : {
+        credentials: true,
+        origin: ["https://www.kevinstonge.com", "https://kevinstonge.com"],
+      };
+console.log(corsConfig);
+server.use(cors(corsConfig));
 const cp = require("cookie-parser");
 server.use(cp());
 const path = require("path");

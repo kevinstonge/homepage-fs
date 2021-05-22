@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 module.exports = (req, res, next) => {
-  if (process.env.NODE_ENV === "testing") {
+  if (process.env.NODE_ENV === "development") {
     return next ? next() : true;
   }
   if (req.cookies?.auth) {

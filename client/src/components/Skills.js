@@ -13,7 +13,7 @@ function Skills() {
   const [status, setStatus] = useState("... fetching data from server ...");
   useEffect(() => {
     axios
-      .get(`https://www.kevinstonge.com/api/portfolio/projects`)
+      .get(`${process.env.REACT_APP_API}/api/portfolio/projects`)
       .then((r) => {
         if (r.status === 200) {
           setProjects(r.data.projects);
