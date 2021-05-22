@@ -14,9 +14,12 @@ server.use(
   })
 );
 const cors = require("cors");
-server.use(cors({ credentials: true }));
-//Access-Control-Allow-Credentials: true
-//cors option: { credentials: true }
+server.use(
+  cors({
+    credentials: true,
+    origin: ["https://www.kevinstonge.com", "https://kevinstonge.com"],
+  })
+);
 const cp = require("cookie-parser");
 server.use(cp());
 const path = require("path");
