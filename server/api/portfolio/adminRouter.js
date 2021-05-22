@@ -6,15 +6,12 @@ const login = require("./adminModel.js");
 const jwt = require("jsonwebtoken");
 
 router.get("*", (req, res) => {
-  if (req.path === "/manifest.json") {
-	res.sendFile(path.join(__dirname, "../../../client/build","manifest.json"));
-  }
-  else if (authenticate(req)) {
+  if (authenticate(req)) {
     router.use(stat("../../../admin/build"));
     if (req.path === "/") {
       res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
     } else {
-        res.sendFile(
+      res.sendFile(
         path.join(__dirname, "../../../admin/build", decodeURI(req.path))
       );
     }
@@ -40,11 +37,11 @@ router.post("/login", async (req, res) => {
       res.cookie("auth", token).redirect(`/admin`);
     } else {
       console.log("unauthorized");
-      res.redirect("/admin");
+      res.redirect("/adminLogin");
     }
   } catch (error) {
     console.log(error);
-    res.redirect("/admin");
+    res.redirect("/adminLogin");
     throw error;
   }
 });
