@@ -3,15 +3,15 @@ module.exports = (req, res, next) => {
   if (process.env.NODE_ENV === "testing") {
     return next ? next() : true;
   }
-
-  let token = "invalid";
   if (req.cookies?.auth) {
-    token = req.cookies.auth;
+    const token = req.cookies.auth || "invalid";
     return jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) {
-        return next ? res.status(401).json({ messae: "unauthorized" }) : false;
+        return next !== undefined
+          ? res.status(401).json({ messae: "unauthorized" })
+          : false;
       } else {
-        return next ? next() : true;
+        return next !== undefined ? next() : true;
       }
     });
   }

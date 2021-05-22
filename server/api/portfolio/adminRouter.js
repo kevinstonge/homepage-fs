@@ -37,9 +37,9 @@ router.post("/login", async (req, res) => {
       res
         .cookie("auth", token, {
           sameSite: "strict",
-          httpOnly: true,
-          secure: true,
-          domain: "*.kevinstonge.com",
+          // httpOnly: true,
+          // secure: true,
+          // domain: "*.kevinstonge.com",
         })
         .redirect(`/admin`);
     } else {
