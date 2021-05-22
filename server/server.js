@@ -7,23 +7,16 @@ server.use(helmet());
 server.use(
   helmet.contentSecurityPolicy({
     directives: {
-      "default-src": [
-        "'self'",
-        "www.kevinstonge.com",
-        "kevinstonge.com",
-      ],
-      "img-src": [
-        "'self'",
-        "blob:",
-        "www.kevinstonge.com",
-        "kevinstonge.com",
-      ],
+      "default-src": ["'self'", "www.kevinstonge.com", "kevinstonge.com"],
+      "img-src": ["'self'", "blob:", "www.kevinstonge.com", "kevinstonge.com"],
       upgradeInsecureRequests: [],
     },
   })
 );
 const cors = require("cors");
-server.use(cors());
+server.use(cors({ credentials: true }));
+//Access-Control-Allow-Credentials: true
+//cors option: { credentials: true }
 const cp = require("cookie-parser");
 server.use(cp());
 const path = require("path");
