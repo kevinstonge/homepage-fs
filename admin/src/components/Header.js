@@ -21,7 +21,7 @@ export default function Header(props) {
         </button>
       </nav>
       <nav>
-        <button onClick={() => axiosWithoutAuth.post(`/api/admin/logout`)}>
+        <button onClick={() => axiosWithoutAuth.post(`/admin/logout`)}>
           log out
         </button>
       </nav>
