@@ -1,5 +1,5 @@
 import "../styles/Header.scss";
-import { axiosWithoutAuth } from "../api/axios.js";
+import { axiosWithAuth } from "../api/axios.js";
 export default function Header(props) {
   const { page, setPage } = props;
   return (
@@ -21,7 +21,7 @@ export default function Header(props) {
         </button>
       </nav>
       <nav>
-        <button onClick={() => axiosWithoutAuth.post(`/admin/logout`)}>
+        <button onClick={() => axiosWithAuth.post(`/admin/logout`)}>
           log out
         </button>
       </nav>

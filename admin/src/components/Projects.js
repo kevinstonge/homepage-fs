@@ -1,7 +1,7 @@
-import { axiosWithoutAuth } from "../api/axios.js";
+import { axiosWithAuth } from "../api/axios.js";
 import { useEffect, useState } from "react";
 import ProjectForm from "./ProjectForm.js";
-import {emptyProject} from "../accessories/emptyProject.js";
+import { emptyProject } from "../accessories/emptyProject.js";
 export default function Projects() {
   const [projectForm, setProjectForm] = useState({
     saved: [],
@@ -9,7 +9,7 @@ export default function Projects() {
   });
   const [skills, setSkills] = useState([]);
   useEffect(() => {
-    axiosWithoutAuth
+    axiosWithAuth
       .get(`/api/portfolio/projects`)
       .then((r) => {
         const imagePath = `${process.env.REACT_APP_API}/images`;
@@ -48,9 +48,17 @@ export default function Projects() {
     <>
       <h2>Projects</h2>
       {projectForm.local.length > 0 &&
-        projectForm.local.sort((a,b)=>a.rank-b.rank).map((project, index) => {
-          return ProjectForm({ project, index, projectForm, setProjectForm, skills });
-        })}
+        projectForm.local
+          .sort((a, b) => a.rank - b.rank)
+          .map((project, index) => {
+            return ProjectForm({
+              project,
+              index,
+              projectForm,
+              setProjectForm,
+              skills,
+            });
+          })}
       <p style={{ fontSize: "smaller" }}>*required</p>
     </>
   );

@@ -1,14 +1,14 @@
-import { axiosWithoutAuth } from "../api/axios.js";
+import { axiosWithAuth } from "../api/axios.js";
 import { useEffect, useState } from "react";
 import SkillForm from "./SkillForm.js";
-import {emptySkill} from "../accessories/emptySkill.js";
+import { emptySkill } from "../accessories/emptySkill.js";
 export default function Skills() {
   const [skillForm, setSkillForm] = useState({
     saved: [],
     local: [],
   });
   useEffect(() => {
-    axiosWithoutAuth
+    axiosWithAuth
       .get(`/api/portfolio/skills`)
       .then((r) => {
         const logoPath = `${process.env.REACT_APP_API}/images`;
