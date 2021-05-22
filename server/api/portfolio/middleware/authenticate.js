@@ -7,11 +7,11 @@ module.exports = (req, res, next) => {
   let token = "invalid";
   if (req.cookies?.auth) {
     token = req.cookies.auth;
-    return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    return jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) {
         return next ? res.status(401).json({ messae: "unauthorized" }) : false;
       } else {
-        return next && decoded ? next() : true;
+        return next ? next() : true;
       }
     });
   }
