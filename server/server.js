@@ -4,10 +4,12 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 const helmet = require("helmet");
 server.use(helmet());
+const domains = process.env.NODE_ENV === "development" ? ["*"] : ["self", "https://www.kevinstonge.com", "https://kevinstonge.com"];
+const sources = process.env.NODE_ENV === "development" ? "unsafe-inline" : ["'self'", ...domains]
 server.use(
   helmet.contentSecurityPolicy({
     directives: {
-      "default-src": ["'self'", "www.kevinstonge.com", "kevinstonge.com"],
+      "default-src": ["*"],
       "img-src": ["'self'", "blob:", "www.kevinstonge.com", "kevinstonge.com"],
       upgradeInsecureRequests: [],
     },
@@ -19,7 +21,7 @@ const corsConfig =
     ? { origin: "*" }
     : {
         credentials: true,
-        origin: ["https://www.kevinstonge.com", "https://kevinstonge.com"],
+        origin: domains,
       };
 console.log(corsConfig);
 server.use(cors(corsConfig));
