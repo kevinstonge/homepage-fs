@@ -9,12 +9,10 @@ router.use(logger);
 router.get("*", (req, res) => {
   if (authenticate(req)) {
     router.use(stat("../../../admin/build"));
-    if (req.path === "/") {
-      res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
+    if (['js', 'css', 'png', 'map', 'json'].includes(req.path.split('.').slice(-1)[0])) {
+      res.sendFile(path.join(__dirname, "../../../admin/build", req.path));
     } else {
-      res.sendFile(
-        path.join(__dirname, "../../../admin/build", decodeURI(req.path))
-      );
+      res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
     }
   } else {
     router.use(stat("../../../adminLogin"));

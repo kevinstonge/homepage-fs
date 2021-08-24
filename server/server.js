@@ -35,7 +35,11 @@ server.use(
 server.use("/images", express.static("./images"));
 server.use(express.static("../client/build/"));
 server.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+  if (['js', 'css', 'png', 'map', 'json'].includes(req.path.split('.').slice(-1)[0])) {
+    res.sendFile(path.join(__dirname, "../client/build", req.path));
+  } else {
+    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+  }
 });
 
 module.exports = server;
