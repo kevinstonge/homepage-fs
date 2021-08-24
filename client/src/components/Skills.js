@@ -51,10 +51,35 @@ function Skills() {
       {projects.length > 0 && (
         <>
           <h2>Projects</h2>
-          {projects.length > 0 &&
-            projects.map((project, id) => (
-              <p key={`${project.title}-${id}`}>{project.title}</p>
-            ))}
+          <div className="projects">
+            {projects.length > 0 &&
+              projects.map((project, id) => (
+                <div className="projectCard" key={`${project.title}-${id}`}>
+                  <h3>{project.title}</h3>
+                  <div className="cardContent">
+                    <div className="left">
+                      <img src={project.img ? project.img : `https://www.kevinstonge.com/images/defaultImage.png`} alt={project.title}/>
+                    </div>
+                    <div className="right">
+                      <p><span className="label">desc</span>: {project.description}</p>
+                      <p><span className="label">link</span>: <a href={project.url}>{project.url}</a></p>
+                      <p><span className="label">repo</span>: <a href={project.github}>{project.github}</a></p>
+                      <p><span className="label">skills</span>: 
+                        {project.skills.length > 0 && 
+                          skills.length > 0 && 
+                          project.skills.map((projectSkill,index)=>{
+                            return(
+                              `${skills.filter(skill=>skill.id === projectSkill)[0].short_name}${index < project.skills.length - 1 ? `, ` : ``}
+                              `
+                            );
+                          })
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
         </>
       )}
       {status !== null && <p>{status}</p>}

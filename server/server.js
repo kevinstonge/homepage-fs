@@ -4,13 +4,12 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 const helmet = require("helmet");
 server.use(helmet());
-const domains = process.env.NODE_ENV === "development" ? ["*"] : ["self", "https://www.kevinstonge.com", "https://kevinstonge.com"];
-const sources = process.env.NODE_ENV === "development" ? "unsafe-inline" : ["'self'", ...domains]
+const domains = process.env.NODE_ENV === "development" ? ["*"] : ["'self'", "https://www.kevinstonge.com", "https://kevinstonge.com"];
 server.use(
   helmet.contentSecurityPolicy({
     directives: {
-      "default-src": ["*"],
-      "img-src": ["'self'", "blob:", "www.kevinstonge.com", "kevinstonge.com"],
+      "default-src": domains,
+      "img-src": [...domains, "blob:"],
       upgradeInsecureRequests: [],
     },
   })
@@ -23,7 +22,6 @@ const corsConfig =
         credentials: true,
         origin: domains,
       };
-console.log(corsConfig);
 server.use(cors(corsConfig));
 const cp = require("cookie-parser");
 server.use(cp());

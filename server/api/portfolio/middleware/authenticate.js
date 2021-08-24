@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     return jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) {
         return next !== undefined
-          ? res.status(401).json({ messae: "unauthorized" })
+          ? res.status(401).json({ message: "unauthorized" })
           : false;
       } else {
         return next !== undefined ? next() : true;
