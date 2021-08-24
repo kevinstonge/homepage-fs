@@ -59,7 +59,7 @@ function Skills() {
                   <h3>{project.title}</h3>
                   <div className="cardContent">
                     <div className="left">
-                      <img src={project.img ? project.img : `https://www.kevinstonge.com/images/defaultImage.png`} alt={project.title}/>
+                      <img src={`https://www.kevinstonge.com/images/${project.image ? project.image : `defaultImage.png`}`} alt={project.title}/>
                     </div>
                     <div className="right">
                       <p><span className="label">desc</span>: {project.description}</p>

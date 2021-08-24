@@ -1,4 +1,3 @@
-const { json } = require("express");
 const db = require("../../data/dbConfig.js");
 const addProject = async (projectObject, skills) => {
   try {
