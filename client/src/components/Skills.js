@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import api from "../lib/api.js";
 import "../style/Skills.scss";
 function Skills() {
   const proficiency = {
@@ -13,7 +14,7 @@ function Skills() {
   const [status, setStatus] = useState("... fetching data from server ...");
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API}/api/portfolio/projects`)
+      .get(`${api}/api/portfolio/projects`)
       .then((r) => {
         if (r.status === 200) {
           setProjects(r.data.projects);
