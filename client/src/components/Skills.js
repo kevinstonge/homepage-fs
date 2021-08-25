@@ -13,21 +13,81 @@ function Skills() {
   const [skills, setSkills] = useState([]);
   const [status, setStatus] = useState("... fetching data from server ...");
   useEffect(() => {
-    axios
-      .get(`${api}/api/portfolio/projects`)
-      .then((r) => {
-        if (r.status === 200) {
-          setProjects(r.data.projects);
-          setSkills(r.data.skills);
-          setStatus(null);
-        } else {
-          console.log("error");
-          setStatus("error getting data from server");
-        }
-      });
+    axios.get(`${api}/api/portfolio/projects`).then((r) => {
+      if (r.status === 200) {
+        setProjects(r.data.projects);
+        setSkills(r.data.skills);
+        setStatus(null);
+      } else {
+        console.log("error");
+        setStatus("error getting data from server");
+      }
+    });
   }, []);
   return (
     <>
+      {projects.length > 0 && (
+        <>
+          <h2>Projects</h2>
+          <div className="projects">
+            {projects.length > 0 &&
+              projects.map((project, id) => (
+                <div className="projectCard" key={`${project.title}-${id}`}>
+                  <h3>{project.title}</h3>
+                  <div className="cardContent">
+                    <div className="left">
+                      <img
+                        src={`https://www.kevinstonge.com/images/${
+                          project.image ? project.image : `defaultImage.png`
+                        }`}
+                        alt={project.title}
+                      />
+                    </div>
+                    <div className="right">
+                      <p>
+                        <span className="label">description: </span>
+                        {project.description}
+                      </p>
+                      <p>
+                        <p>
+                          <span className="label">deployed application: </span>
+                          <a href={project.url}>
+                            {project.url.replace(
+                              /^(http)+(s)*(:\/\/)+(www\.)*/i,
+                              ""
+                            )}
+                          </a>
+                        </p>
+                      </p>
+                      <p>
+                        <span className="label">github repository: </span>
+                        <a href={project.github}>
+                          {project.github.replace(
+                            /^(http)+(s)*(:\/\/)+(www\.)*/i,
+                            ""
+                          )}
+                        </a>
+                      </p>
+                      <p>
+                        <span className="label">skills</span>:
+                        {project.skills.length > 0 &&
+                          skills.length > 0 &&
+                          project.skills.map((projectSkill, index) => {
+                            return `${
+                              skills.filter(
+                                (skill) => skill.id === projectSkill
+                              )[0].short_name
+                            }${index < project.skills.length - 1 ? `, ` : ``}
+                              `;
+                          })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </>
+      )}
       {skills.length > 0 && (
         <>
           <h2>My technical skills</h2>
@@ -47,40 +107,6 @@ function Skills() {
               </div>
             ))}
           </div>
-        </>
-      )}
-      {projects.length > 0 && (
-        <>
-          <h2>Projects</h2>
-          <div className="projects">
-            {projects.length > 0 &&
-              projects.map((project, id) => (
-                <div className="projectCard" key={`${project.title}-${id}`}>
-                  <h3>{project.title}</h3>
-                  <div className="cardContent">
-                    <div className="left">
-                      <img src={`https://www.kevinstonge.com/images/${project.image ? project.image : `defaultImage.png`}`} alt={project.title}/>
-                    </div>
-                    <div className="right">
-                      <p><span className="label">desc</span>: {project.description}</p>
-                      <p><span className="label">link</span>: <a href={project.url}>{project.url}</a></p>
-                      <p><span className="label">repo</span>: <a href={project.github}>{project.github}</a></p>
-                      <p><span className="label">skills</span>: 
-                        {project.skills.length > 0 && 
-                          skills.length > 0 && 
-                          project.skills.map((projectSkill,index)=>{
-                            return(
-                              `${skills.filter(skill=>skill.id === projectSkill)[0].short_name}${index < project.skills.length - 1 ? `, ` : ``}
-                              `
-                            );
-                          })
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
         </>
       )}
       {status !== null && <p>{status}</p>}

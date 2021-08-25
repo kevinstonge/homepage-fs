@@ -11,7 +11,7 @@ body {
   align-items: flex-start;
   width: 100vw;
   height: 100vh;
-  @media screen and (min-width: 400px) {
+  @media screen and (min-width: 600px) {
     align-items: center;
   }
   #mainContainer {
@@ -19,21 +19,21 @@ body {
     margin: 0;
     align-items: stretch;
     width: 100%;
-    @media screen and (min-width: 400px) {
+    @media screen and (min-width: 600px) {
       width: 70vw;
       margin: 1rem;
       min-width: min-content;
       max-width: 60rem;
     }
     #contentContainer {
+      width: 100%;
       @include flexC();
       align-items: flex-start;
       gap: 0.5rem;
       padding: 0.1rem;
       background-color: $b3;
-      border-left: 1px solid $b4;
       border-radius: 0.25rem 0.25rem 0 0;
-      @media screen and (min-width: 400px) {
+      @media screen and (min-width: 600px) {
         padding: 0.5rem;
       }
       h2 {

@@ -33,10 +33,14 @@
   }
 }
 .projects {
-  @include flexC();
+  width: 100%;
+  @include flexR();
+  justify-content: stretch;
+  flex-wrap: wrap;
   gap: 0.5rem;
   > .projectCard {
     @include card();
+    width: 100%;
     padding: 0.5rem;
     @include flexC();
     gap: 0.5rem;
@@ -47,15 +51,15 @@
     > .cardContent {
       @include flexR();
       gap: 0.5rem;
-      width: 100%;
+      max-width: 50rem;
       > .left {
-        width: 50%;
+        width: 30%;
         > img {
           width: 100%;
         }
       }
       > .right {
-        width: 50%;
+        width: 70%;
       }
       .label {
         font-weight: bold;
