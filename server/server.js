@@ -4,7 +4,7 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 const helmet = require("helmet");
 server.use(helmet());
-const domains = process.env.NODE_ENV === "development" ? ["*"] : ["'self'", "https://www.kevinstonge.com", "https://kevinstonge.com"];
+const domains = process.env.NODE_ENV === "development" ? ["*"] : ["'self'", "https://www.kevinstonge.com", "https://kevinstonge.com", "http://www.kevinstonge.com", "http://kevinstonge.com"];
 server.use(
   helmet.contentSecurityPolicy({
     directives: {
