@@ -2,8 +2,6 @@ const router = require("express").Router();
 const stat = require("express").static;
 const path = require("path");
 const authenticate = require("./middleware/authenticate.js");
-const login = require("./adminModel.js");
-const jwt = require("jsonwebtoken");
 // const logger = require("./middleware/log.js");
 // router.use(logger);
 router.get("*", authenticate, (req, res) => {
