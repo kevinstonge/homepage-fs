@@ -1,30 +1,16 @@
 const jwt = require("jsonwebtoken");
-const router = require("express").Router();
-const stat = require("express").static;
 module.exports = (req, res, next) => {
-  if (process.env.NODE_ENV === "development") {
-    return next ? next() : true;
-  }
   if (req.cookies?.auth) {
     const token = req.cookies.auth || "invalid";
-    return jwt.verify(token, process.env.JWT_SECRET, (err) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) {
-        return next !== undefined
-          ? res.status(401).json({ message: "unauthorized" })
-          : false;
+        res.redirect('/adminLogin');
       } else {
-        return next !== undefined ? next() : true;
+        next;
       }
     });
+    res.status(500).json({message: "auth middleware didn't return anything up to this point."});
   } else {
-    // res.redirect('/adminLogin'); //no??
-    router.use(stat("../../../adminLogin"));
-    if (req.path === "/") {
-      res.sendFile(path.join(__dirname, "../../../adminLogin", "index.html"));
-    } else {
-      res.sendFile(
-        path.join(__dirname, "../../../adminLogin", decodeURI(req.path))
-      );
-    }
+    res.redirect('/adminLogin'); //no??
   }
 };

@@ -28,6 +28,7 @@ server.use(cors(corsConfig));
 
 const path = require("path");
 server.use("/admin", authenticate, require("./api/portfolio/adminRouter.js"));
+server.use("/adminLogin", require("./api/portfolio/adminLogin.js"));
 server.use("/api/portfolio/skills", require("./api/portfolio/skillsRouter.js"));
 server.use(
   "/api/portfolio/projects",
