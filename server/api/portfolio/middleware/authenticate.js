@@ -14,5 +14,7 @@ module.exports = (req, res, next) => {
         return next !== undefined ? next() : true;
       }
     });
+  } else {
+    res.redirect('/adminLogin');
   }
 };
