@@ -17,8 +17,4 @@ router.get("*", authenticate, (req, res) => {
   }
 });
 
-router.post("/logout", (req, res) => {
-  res.clearCookie("auth").redirect("/adminLogin");
-});
-
 module.exports = router;

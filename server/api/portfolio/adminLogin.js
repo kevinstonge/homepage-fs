@@ -37,4 +37,7 @@ router.post("/login", async (req, res) => {
   }
   res.redirect("/admin")
 })
+router.post("/logout", (req, res) => {
+  res.clearCookie("auth").redirect("/adminLogin");
+})
 module.exports = router;
