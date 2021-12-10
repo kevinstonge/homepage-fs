@@ -1,10 +1,18 @@
 const express = require("express");
 const server = express();
+const helmet = require("helmet");
+const cors = require("cors");
+const cp = require("cookie-parser");
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
-const helmet = require("helmet");
 server.use(helmet());
-const domains = process.env.NODE_ENV === "development" ? ["*"] : ["'self'", "https://www.kevinstonge.com", "https://kevinstonge.com", "http://www.kevinstonge.com", "http://kevinstonge.com"];
+server.use(cp());
+
+const domains =
+  process.env.NODE_ENV === "development" ?
+    ["http://localhost:3000"] :
+    ["'self'", "https://www.kevinstonge.com", "https://kevinstonge.com", "http://www.kevinstonge.com", "http://kevinstonge.com"];
+    
 server.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -14,17 +22,9 @@ server.use(
     },
   })
 );
-const cors = require("cors");
-const corsConfig =
-  process.env.NODE_ENV === "development"
-    ? { origin: "*" }
-    : {
-        credentials: true,
-        origin: domains,
-      };
+const corsConfig = { credentials: true, origin: domains };
 server.use(cors(corsConfig));
-const cp = require("cookie-parser");
-server.use(cp());
+
 const path = require("path");
 server.use("/admin", require("./api/portfolio/adminRouter.js"));
 server.use("/api/portfolio/skills", require("./api/portfolio/skillsRouter.js"));

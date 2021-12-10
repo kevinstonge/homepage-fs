@@ -4,8 +4,8 @@ const path = require("path");
 const authenticate = require("./middleware/authenticate.js");
 const login = require("./adminModel.js");
 const jwt = require("jsonwebtoken");
-const logger = require("./middleware/log.js");
-router.use(logger);
+// const logger = require("./middleware/log.js");
+// router.use(logger);
 router.get("*", (req, res) => {
   if (authenticate(req)) {
     router.use(stat("../../../admin/build"));

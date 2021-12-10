@@ -91,7 +91,9 @@ export default function ProjectForm(props) {
         }
     }
     const submitHandler = (e) => {
-        const imageChanged = projectForm.local[index].image === projectForm.saved[index].image;
+        console.log(`local image: ${projectForm.local[index].image}, saved image: ${projectForm.saved[index].image}`);
+        const imageChanged = projectForm.local[index].image !== projectForm.saved[index].image;
+        console.log('imageChanged: ', imageChanged);
         const contentTypeHeader = imageChanged
             ? "multipart/form"
             : "application/x-www-form-urlencoded";
@@ -107,6 +109,7 @@ export default function ProjectForm(props) {
         formData.append("github", e.target["github"].value);
         formData.append("skills", JSON.stringify(projectForm.local[index].skills));
         if (imageChanged) {
+            console.log(`target.image.files[0]: ${e.target.["image"].files[0]}`)
             formData.append("image", e.target["image"].files[0]);
         }
         axiosWithAuth({
@@ -157,9 +160,9 @@ export default function ProjectForm(props) {
             <label htmlFor={`project-${project.id}-image`}>
                 <p>image:</p>
                 <img
-                src={projectForm.local[index].localImage}
-                alt={`${projectForm.local[index].title}`}
-                className="project-image"
+                    src={projectForm.local[index].localImage}
+                    alt={`${projectForm.local[index].title}`}
+                    className="project-image"
                 />
                 <input
                 id={`project-${project.id}-image`}

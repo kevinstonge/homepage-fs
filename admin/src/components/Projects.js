@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ProjectForm from "./ProjectForm.js";
 import { emptyProject } from "../accessories/emptyProject.js";
 export default function Projects() {
+  const imagePath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_API : process.env.REACT_APP_API_DEV) +"/images";
   const [projectForm, setProjectForm] = useState({
     saved: [],
     local: [],
@@ -12,7 +13,6 @@ export default function Projects() {
     axiosWithAuth
       .get(`/api/portfolio/projects`)
       .then((r) => {
-        const imagePath = `${process.env.REACT_APP_API}/images`;
         const newProject = emptyProject;
         setProjectForm({
           saved: [

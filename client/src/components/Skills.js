@@ -3,6 +3,7 @@ import axios from "axios";
 import api from "../lib/api.js";
 import "../style/Skills.scss";
 function Skills() {
+  const imagePath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_API : process.env.REACT_APP_API_DEV) + "/images/";
   const proficiency = {
     1: "beginner",
     2: "intermediate",
@@ -14,6 +15,7 @@ function Skills() {
   const [status, setStatus] = useState("... fetching data from server ...");
   useEffect(() => {
     axios.get(`${api}/api/portfolio/projects`).then((r) => {
+      console.log(r);
       if (r.status === 200) {
         setProjects(r.data.projects);
         setSkills(r.data.skills);
@@ -22,7 +24,7 @@ function Skills() {
         console.log("error");
         setStatus("error getting data from server");
       }
-    });
+    }).catch(e=>console.log);
   }, []);
   return (
     <>
@@ -36,12 +38,14 @@ function Skills() {
                   <h3>{project.title}</h3>
                   <div className="cardContent">
                     <div className="left">
+                      <a href={project.url} target="NEW">
                       <img
-                        src={`https://www.kevinstonge.com/images/${
+                        src={`${imagePath}/${
                           project.image ? project.image : `defaultImage.png`
                         }`}
                         alt={project.title}
-                      />
+                        />
+                        </a>
                     </div>
                     <div className="right">
                       <p>
@@ -61,7 +65,7 @@ function Skills() {
                       </p>
                       <p>
                         <span className="label">github repository: </span>
-                        <a href={project.github}>
+                        <a href={project.github} target="NEW">
                           {project.github.replace(
                             /^(http)+(s)*(:\/\/)+(www\.)*/i,
                             ""
