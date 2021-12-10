@@ -9,8 +9,7 @@ module.exports = (req, res, next) => {
         next;
       }
     });
-    res.status(500).json({message: "auth middleware didn't return anything up to this point."});
   } else {
-    res.redirect('/adminLogin'); //no??
+    res.redirect('/adminLogin');
   }
 };
