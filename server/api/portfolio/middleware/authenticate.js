@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const router = require("express").Router();
 module.exports = (req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     return next ? next() : true;
