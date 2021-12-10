@@ -15,6 +15,6 @@ module.exports = (req, res, next) => {
       }
     });
   } else {
-    res.redirect('/adminLogin');
+    res.redirect('/admin/adminLogin');
   }
 };
