@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const stat = require("express").static;
 const path = require("path");
+const { login } = require('../portfolio/adminModel.js');
 router.get("*", (req, res) => {
   router.use(stat("../../../adminLogin"));
   if (req.path === "/") {
