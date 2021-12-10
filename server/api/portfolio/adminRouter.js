@@ -6,23 +6,16 @@ const login = require("./adminModel.js");
 const jwt = require("jsonwebtoken");
 // const logger = require("./middleware/log.js");
 // router.use(logger);
-router.get("*", (req, res) => {
-  if (authenticate(req)) {
+router.get("*", authenticate, (req, res) => {
+  try {
     router.use(stat("../../../admin/build"));
     if (['js', 'css', 'png', 'map', 'json'].includes(req.path.split('.').slice(-1)[0])) {
       res.sendFile(path.join(__dirname, "../../../admin/build", req.path));
     } else {
       res.sendFile(path.join(__dirname, "../../../admin/build", "index.html"));
     }
-  } else {
-    router.use(stat("../../../adminLogin"));
-    if (req.path === "/") {
-      res.sendFile(path.join(__dirname, "../../../adminLogin", "index.html"));
-    } else {
-      res.sendFile(
-        path.join(__dirname, "../../../adminLogin", decodeURI(req.path))
-      );
-    }
+  } catch {
+    res.status(404).json({message: "not found"})
   }
 });
 

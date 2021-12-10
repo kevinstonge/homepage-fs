@@ -15,6 +15,14 @@ module.exports = (req, res, next) => {
       }
     });
   } else {
-    res.redirect('/admin/adminLogin');
+    // res.redirect('/adminLogin'); //no??
+    router.use(stat("../../../adminLogin"));
+    if (req.path === "/") {
+      res.sendFile(path.join(__dirname, "../../../adminLogin", "index.html"));
+    } else {
+      res.sendFile(
+        path.join(__dirname, "../../../adminLogin", decodeURI(req.path))
+      );
+    }
   }
 };

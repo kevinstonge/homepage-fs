@@ -3,6 +3,7 @@ const server = express();
 const helmet = require("helmet");
 const cors = require("cors");
 const cp = require("cookie-parser");
+const authenticate = require("api/portforlio////aaaah the authetnicate middleware goes her3e!")
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(helmet());
@@ -26,6 +27,7 @@ const corsConfig = { credentials: true, origin: domains };
 server.use(cors(corsConfig));
 
 const path = require("path");
+//do authentication HERE as middlewhere vvvvvvv //
 server.use("/admin", require("./api/portfolio/adminRouter.js"));
 server.use("/api/portfolio/skills", require("./api/portfolio/skillsRouter.js"));
 server.use(
