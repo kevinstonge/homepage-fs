@@ -19,32 +19,6 @@ router.get("*", authenticate, (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  try {
-    const username = req.body.username || "incorrect";
-    const password = req.body.password || "invalid";
-    const authorized = await login({ username, password });
-    if (authorized) {
-      const token = jwt.sign({ user: req.body.user }, process.env.JWT_SECRET);
-      res
-        .cookie("auth", token, {
-          sameSite: "strict",
-          // httpOnly: true,
-          // secure: true,
-          // domain: "*.kevinstonge.com",
-        })
-        .redirect(`/admin`);
-    } else {
-      console.log("unauthorized");
-      res.redirect("/adminLogin");
-    }
-  } catch (error) {
-    console.log(error);
-    res.redirect("/adminLogin");
-    throw error;
-  }
-});
-
 router.post("/logout", (req, res) => {
   res.clearCookie("auth").redirect("/adminLogin");
 });
