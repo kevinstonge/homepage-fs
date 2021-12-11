@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
       }
     });
   } else {
-    console.log(req.headers);
+    console.log(req.cookies);
     console.log('no auth cookie!!');
     res.redirect('/adminLogin');
   }

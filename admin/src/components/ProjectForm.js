@@ -91,17 +91,15 @@ export default function ProjectForm(props) {
         }
     }
     const submitHandler = (e) => {
-        console.log(`local image: ${projectForm.local[index].image}, saved image: ${projectForm.saved[index].image}`);
         const imageChanged = projectForm.local[index].image !== projectForm.saved[index].image;
-        console.log('imageChanged: ', imageChanged);
         const contentTypeHeader = imageChanged
             ? "multipart/form"
             : "application/x-www-form-urlencoded";
         const method = index === 0 ? "post" : "put";
         const url = 
             index === 0
-                ? `api/portfolio/projects/`
-                : `api/portfolio/projects/${project.id}`;
+                ? `/api/portfolio/projects/`
+                : `/api/portfolio/projects/${project.id}`;
         const formData = new FormData();
         formData.append("title", e.target["title"].value);
         formData.append("description", e.target["description"].value);
@@ -109,7 +107,6 @@ export default function ProjectForm(props) {
         formData.append("github", e.target["github"].value);
         formData.append("skills", JSON.stringify(projectForm.local[index].skills));
         if (imageChanged) {
-            console.log(`target.image.files[0]: ${e.target.["image"].files[0]}`)
             formData.append("image", e.target["image"].files[0]);
         }
         axiosWithAuth({
