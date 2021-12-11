@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 module.exports = (req, res, next) => {
   if (req.cookies?.auth) {
-    console.log(req.cookies);
     const token = req.cookies.auth || "invalid";
     jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) {
@@ -14,6 +13,7 @@ module.exports = (req, res, next) => {
     });
   } else {
     console.log('no auth cookie!!');
+    console.log(`req.body: ${JSON.parse(req.body)}\n---\nreq.method: ${req.method}\n--\nreq.headers: ${JSON.parse(req.headers)}`);
     res.redirect('/adminLogin');
   }
 };
