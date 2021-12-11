@@ -109,10 +109,12 @@ export default function ProjectForm(props) {
         if (imageChanged) {
             formData.append("image", e.target["image"].files[0]);
         }
+        console.log('axios URL: ', url);
         axiosWithAuth({
             method,
             headers: {
                 "Content-Type": contentTypeHeader,
+                ...formData.getHeaders(),
             },
             url,
             data: formData,
