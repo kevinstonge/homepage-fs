@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
     });
   } else {
     console.log('no auth cookie!!');
-    console.log(`req.body: ${JSON.parse(req.body)}\n---\nreq.method: ${req.method}\n--\nreq.headers: ${JSON.parse(req.headers)}`);
+    console.log(`req.body: ${JSON.stringify(req.body)}\n---\nreq.method: ${req.method}\n--\nreq.headers: ${JSON.stringify(req.headers)}`);
     res.redirect('/adminLogin');
   }
 };
