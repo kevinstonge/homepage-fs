@@ -3,7 +3,6 @@ const server = express();
 const helmet = require("helmet");
 const cors = require("cors");
 const cp = require("cookie-parser");
-const authenticate = require("./api/portfolio/middleware/authenticate.js");
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(helmet());
@@ -11,7 +10,7 @@ server.use(cp());
 
 const domains =
   process.env.NODE_ENV === "development" ?
-    ["http://localhost:3000"] :
+    ["*"] :
     ["'self'", "https://www.kevinstonge.com", "https://kevinstonge.com", "http://www.kevinstonge.com", "http://kevinstonge.com"];
     
 server.use(
@@ -27,7 +26,7 @@ const corsConfig = { credentials: true, origin: domains };
 server.use(cors(corsConfig));
 
 const path = require("path");
-server.use("/admin", authenticate, require("./api/portfolio/adminRouter.js"));
+server.use("/admin", require("./api/portfolio/adminRouter.js"));
 server.use("/adminLogin", require("./api/portfolio/adminLogin.js"));
 server.use("/api/portfolio/skills", require("./api/portfolio/skillsRouter.js"));
 server.use(

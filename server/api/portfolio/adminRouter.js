@@ -5,6 +5,7 @@ const authenticate = require("./middleware/authenticate.js");
 // const logger = require("./middleware/log.js");
 // router.use(logger);
 router.get("*", authenticate, (req, res) => {
+  console.log('passed auth');
   try {
     router.use(stat("../../../admin/build"));
     if (['js', 'css', 'png', 'map', 'json'].includes(req.path.split('.').slice(-1)[0])) {
