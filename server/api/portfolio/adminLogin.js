@@ -18,27 +18,22 @@ router.post("/login", async (req, res) => {
    try {
     const username = req.body.username || "incorrect";
     const password = req.body.password || "invalid";
-    const user = await db("admin").where({ username }).first();
-    if (user) {
+    console.log(username);
+    const user = await db("admin").where({username: username});
+    console.log(user);
+    if (user[0] === username) {
       if (bcrypt.compareSync(password, user.password)) {
         const token = jwt.sign({ user: req.body.user }, process.env.JWT_SECRET);
-        res
-          .cookie("auth", token, {
-          sameSite: "strict",
-          // httpOnly: true,
-          // secure: true,
-          // domain: "*.kevinstonge.com",
-        })
-        .redirect(`/admin`);
+        res.status(200).json({token})
       } else {
-        res.redirect("/adminLogin");
+        res.status(401).json({message: "incorrect password"})
       }
     } else {
-      res.redirect("/adminLogin");
+      res.status(401).json({message: "no such user"});
     }
   } catch (error) {
     console.log(error);
-    res.redirect("/adminLogin");
+    res.status(500).json({message: "server error during login attempt"})
   }
 })
 router.post("/logout", (req, res) => {

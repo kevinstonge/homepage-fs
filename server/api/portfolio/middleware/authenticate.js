@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
     const token = req.cookies.auth || "invalid";
     jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) {
-        console.log('error in jwt.verifty: ', err)
+        console.log('error in jwt.verify: ', err)
         res.redirect('/adminLogin');
       } else {
         console.log('passed jwt');

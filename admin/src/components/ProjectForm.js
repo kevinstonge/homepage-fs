@@ -114,7 +114,6 @@ export default function ProjectForm(props) {
             method,
             headers: {
                 "Content-Type": contentTypeHeader,
-                ...formData.getHeaders(),
             },
             url,
             data: formData,

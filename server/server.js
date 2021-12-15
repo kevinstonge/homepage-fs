@@ -7,22 +7,22 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(helmet());
 server.use(cp());
-
+const nodeEnv = process.env.NODE_ENV;
 const domains =
-  process.env.NODE_ENV === "development" ?
-    ["*"] :
-    ["'self'", "https://www.kevinstonge.com", "https://kevinstonge.com", "http://www.kevinstonge.com", "http://kevinstonge.com"];
+  nodeEnv === "production" ?
+    ["'self'", "https://www.kevinstonge.com", "https://kevinstonge.com", "http://www.kevinstonge.com", "http://kevinstonge.com"]:
+    ['*'] ;
     
 server.use(
   helmet.contentSecurityPolicy({
     directives: {
-      "default-src": domains,
+      "default-src": [...domains],
       "img-src": [...domains, "blob:"],
       upgradeInsecureRequests: [],
     },
   })
 );
-const corsConfig = { credentials: true, origin: domains };
+const corsConfig = { credentials: true, origin: nodeEnv === "production" ? domains : true };
 server.use(cors(corsConfig));
 
 const path = require("path");
