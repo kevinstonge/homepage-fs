@@ -1,19 +1,19 @@
 const jwt = require("jsonwebtoken");
 module.exports = (req, res, next) => {
-  if (req.cookies?.auth) {
-    const token = req.cookies.auth || "invalid";
+  console.log(req.headers);
+  if (req.headers?.authorization) {
+    const token = req.headers.authorization.split(" ")[1] || "invalid";
+    console.log(token);
     jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) {
-        console.log('error in jwt.verify: ', err)
-        res.redirect('/adminLogin');
+        res.status(401).json({ message: "authentication failed" });
       } else {
-        console.log('passed jwt');
         next();
       }
     });
   } else {
-    console.log('no auth cookie!!');
-    console.log(`req.body: ${JSON.stringify(req.body)}\n---\nreq.method: ${req.method}\n--\nreq.headers: ${JSON.stringify(req.headers)}`);
-    res.redirect('/adminLogin');
+    res
+      .status(401)
+      .json({ message: "no authentication token provided, please log in" });
   }
 };

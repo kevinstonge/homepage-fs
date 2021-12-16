@@ -21,7 +21,12 @@ export default function Header(props) {
         </button>
       </nav>
       <nav>
-        <button onClick={() => axiosWithAuth.post(`/adminLogin/logout`)}>
+        <button
+          onClick={() => {
+            props.setToken(null);
+            localStorage.removeItem("token");
+          }}
+        >
           log out
         </button>
       </nav>
