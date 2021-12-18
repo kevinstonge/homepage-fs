@@ -1,11 +1,10 @@
 import { axiosWithAuth } from "../api/axios.js";
 export default function Login(props) {
-  // action="/adminLogin/login" method="POST"
   const onSubmit = (e) => {
     e.preventDefault();
     axiosWithAuth({
       method: "POST",
-      url: "/adminLogin/login",
+      url: "/admin/login",
       data: {
         username: e.target[0].value,
         password: e.target[1].value,

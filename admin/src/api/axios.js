@@ -12,6 +12,6 @@ export const axiosWithAuth = axios.create({
   baseURL,
   withCredentials: true,
   headers: {
-    Authorization: `Bearer ${token}`,
+    authorization: `Bearer ${token}`,
   },
 });

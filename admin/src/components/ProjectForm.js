@@ -269,7 +269,7 @@ export default function ProjectForm(props) {
                 id="form-footer"
             >
                 <p>Skills:</p>
-                {skills.map(skill=>{
+                {skills && skills.length > 0 && skills.map(skill=>{
                     const sId=`p${project.id}-s${skill.id}`;
                     return(
                         <label htmlFor={sId} key={sId} className="checkbox-label">
