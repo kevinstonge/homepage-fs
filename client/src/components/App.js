@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import "../style/App.scss";
 import Header from "./Header.js";
 import Skills from "./Skills.js";
+import About from "./About.js";
 import Contact from "./Contact.js";
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
               <Skills />
             </Route>
             <Route path="/about">
-              <p>about</p>
+              <About />
             </Route>
             <Route path="/contact">
               <Contact />
