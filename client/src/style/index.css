@@ -120,7 +120,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 table {
@@ -133,4 +133,7 @@ table {
 a {
   text-decoration: none;
   color: unset;
+}
+p {
+  line-height: 1.3rem;
 }

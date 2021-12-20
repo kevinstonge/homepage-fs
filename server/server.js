@@ -26,6 +26,7 @@ const corsConfig = { credentials: true, origin: nodeEnv === "production" ? domai
 server.use(cors(corsConfig));
 
 const path = require("path");
+server.use("/contact", require('./api/portfolio/contactRouter.js'));
 server.use("/admin", require("./api/portfolio/adminRouter.js"));
 server.use("/api/portfolio/skills", require("./api/portfolio/skillsRouter.js"));
 server.use(
