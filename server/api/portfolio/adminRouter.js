@@ -4,9 +4,7 @@ const path = require("path");
 const db = require("../../data/dbConfig.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const authenticate = require("./middleware/authenticate.js");
-// const logger = require("./middleware/log.js");
-// router.use(logger);
+
 router.get("*", (req, res) => {
   try {
     router.use(stat("../../../admin/build"));
