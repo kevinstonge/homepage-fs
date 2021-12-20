@@ -8,6 +8,7 @@ $f2: #ccc;
 $f3: #ddd;
 $f4: #eee;
 $e1: #a3c;
+$err: #e33;
 @mixin flexR {
   display: flex;
   flex-direction: row;
@@ -20,4 +21,49 @@ $e1: #a3c;
   border-radius: $r $r 0 0;
   border-top: 1px solid $c;
   border-left: 1px solid $c;
+}
+@mixin card {
+  background-color: $b4;
+  color: $f3;
+  padding: 0.25rem;
+  border-radius: 0.2rem 0;
+  box-shadow: 0.1rem 0.1rem 0 $b1;
+  width: 100%;
+  padding: 0.5rem;
+  @include flexC();
+  gap: 0.5rem;
+}
+input,
+textarea {
+  background-color: $b2;
+  color: $f4;
+  padding: 0.2rem 0.3rem;
+}
+
+input {
+  width: 100%;
+  max-width: 20rem;
+}
+
+textarea {
+  width: 100%;
+  max-width: 40rem;
+  height: 20rem;
+  max-height: calc(100vh - 20rem);
+  min-height: 4rem;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: $f4;
+  box-shadow: 0 0 0px 100px $b2 inset;
+  -webkit-box-shadow: 0 0 0px 100px $b2 inset;
+  transition: background-color 5000s ease-in-out 0s;
 }

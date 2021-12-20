@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import "../style/App.scss";
 import Header from "./Header.js";
 import Skills from "./Skills.js";
+import Contact from "./Contact.js";
 function App() {
   return (
     <>
@@ -16,7 +17,7 @@ function App() {
               <p>about</p>
             </Route>
             <Route path="/contact">
-              <p>contact</p>
+              <Contact />
             </Route>
           </div>
         </div>

@@ -1,0 +1,30 @@
+@import './base.scss';
+
+.card {
+  @include card;
+  form {
+    @include flexC();
+    gap: 1rem;
+  }
+}
+button {
+  font-weight: bolder;
+  padding: 0.2rem 0.5rem;
+  align-self: flex-start;
+  background-color: $b5;
+  color: $f4;
+  &:hover {
+    background-color: $e1;
+    cursor: pointer;
+  }
+}
+.flexR {
+  @include flexR();
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error {
+  color: $err;
+  font-style: italic;
+}

@@ -1,11 +1,5 @@
 @import './base.scss';
-@mixin card {
-  background-color: $b4;
-  color: $f3;
-  padding: 0.25rem;
-  border-radius: 0.2rem 0;
-  box-shadow: 0.1rem 0.1rem 0 $b1;
-}
+
 .skills {
   @include flexR();
   flex-wrap: wrap;
@@ -40,10 +34,6 @@
   gap: 0.5rem;
   > .projectCard {
     @include card();
-    width: 100%;
-    padding: 0.5rem;
-    @include flexC();
-    gap: 0.5rem;
     > h3 {
       font-size: large;
       font-weight: bold;
