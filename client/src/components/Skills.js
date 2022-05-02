@@ -80,7 +80,7 @@ function Skills() {
                             return `${
                               skills.filter(
                                 (skill) => skill.id === projectSkill
-                              )[0].short_name || ''
+                              )[0]?.short_name || ''
                             }${index < project.skills.length - 1 ? `, ` : ``}
                               `;
                           })}
