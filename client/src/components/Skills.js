@@ -33,7 +33,7 @@ function Skills() {
           <h2>Projects</h2>
           <div className="projects">
             {projects.length > 0 &&
-              projects.map((project, id) => (
+              projects.sort((a, b) => a.rank - b.rank).map((project, id) => (
                 <div className="projectCard" key={`${project.title}-${id}`}>
                   <h3>{project.title}</h3>
                   <div className="cardContent">
